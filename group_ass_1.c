@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
+#include <ctype.h>
 
 int main()
 {
@@ -18,6 +20,7 @@ int main()
 
     type:
 	scanf("%d", &userinput);
+    fflush(stdin);
 
 	switch (userinput) {
 
@@ -75,12 +78,14 @@ void addNewItem(){
     struct data Data;
     printf("Please enter 1) RecordNumber, 2) ItemName, 3) ItemNumber, 4) Category, 5) Quantity, 6) Weight 7) Recipient, 8) Final Destination, and 9) Delivery status :\n");
     scanf("%d%s%d%s%d%lf%s%s%s",&Data.Record, Data.ItemName, &Data.ItemNumber, Data.Category, &Data.Quantity, &Data.Weight, Data.Recipient,Data.FinalDestination, Data.Status);
+    fflush(stdin);
     printf(" you have typed %d %s %d %s %d %.2f %s %s %s",Data.Record, Data.ItemName, Data.ItemNumber, Data.Category, Data.Quantity, Data.Weight, Data.Recipient, Data.FinalDestination, Data.Status);
     writeIn(Data);
     char typeAgain;
     error:
     printf("Do you want to add antoher item record (y/n): ");
     scanf("%c", &typeAgain);
+    fflush(stdin);
     switch (typeAgain){
         case 'y':
         case 'Y':
@@ -89,8 +94,10 @@ void addNewItem(){
         case 'N':
             break;
         default:
+            printf("Unknown input.\n");
             goto error;
     }
+
 
     //1002 Japanese-Garden-Pear-Gift-Box 300522 Food 2 4.2 Cheung-Siu-Ming Yuen-Long Arrival
 
@@ -99,7 +106,7 @@ void addNewItem(){
 void replace(char from[]){
     int i = 0;
     while (from[i] != '\0') {
-        if (from[i] == '-') {
+        if (from[i] == '-' || from[i] == '_') {
             from[i] = ' ';
         }
         i++;
