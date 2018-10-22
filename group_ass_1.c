@@ -2,6 +2,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
 
 int haveData;
@@ -78,7 +79,7 @@ struct data{
     char Recipient[50];
     char FinalDestination[20];
     char Status[20];
-};
+}Data;
 
     /*
      * Examples
@@ -97,7 +98,7 @@ void addNewItem(){
     void writeIn(struct data);
     addNEW:
     fflush(stdin);
-    struct data Data;
+    //struct data Data;
     printf("Please enter 1) RecordNumber, 2) ItemName, 3) ItemNumber, 4) Category, 5) Quantity, 6) Weight 7) Recipient, 8) Final Destination, and 9) Delivery status :\n");
     scanf("%d%s%d%s%d%lf%s%s%s",&Data.Record, Data.ItemName, &Data.ItemNumber, Data.Category, &Data.Quantity, &Data.Weight, Data.Recipient,Data.FinalDestination, Data.Status);
     fflush(stdin);
@@ -124,7 +125,7 @@ void addNewItem(){
 
 void displayItem(){
     void showRecords(void);
-    showRecords();
+    //showRecords(); This shit not working now.
     printf("\nPress ENTER to go back....\t");
     getchar();
     fflush(stdin);
@@ -176,9 +177,29 @@ void writeIn(struct data structdata){
     fclose(fp);
 }
 
-void showRecords(){
+void showRecords(){// Still trying how
     FILE *file = fopen("Stock.txt", "r");
-    char data[200];
-    while ()
-    fscanf(file,"%s",data);
+    char output;
+    struct data showdata;
+    while (feof(file)) {
+        fscanf(file,"%d",&showdata.Record);
+        printf(file, "Record: %d\n", showdata.Record);
+        fscanf(file,"%s",&output);
+        printf(file, "ItemName: %s\n", output);
+        fscanf(file,"%d",&showdata.ItemNumber);
+        printf(file, "ItemNumber: %d\n", showdata.ItemNumber);
+        fscanf(file,"%s",&output);
+        printf(file, "Category: %s\n", output);
+        fscanf(file,"%d",&showdata.Quantity);
+        printf(file, "Quantity: %d\n", showdata.Quantity);
+        fscanf(file,"%lf",&showdata.Weight);
+        printf(file, "Weight: %.1f kg\n", showdata.Weight);
+        fscanf(file,"%s",&output);
+        printf(file, "Recipient: %s\n", output);
+        fscanf(file,"%s",showdata.FinalDestination);
+        printf(file, "Designation: %s\n", showdata.FinalDestination);
+        fscanf(file,"%s",showdata.Status);
+        printf(file, "Status: %s\n\n", showdata.Status);
+    }
+    fclose(file);
 }
