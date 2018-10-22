@@ -79,11 +79,12 @@ void addNewItem(){
     printf("Please enter 1) RecordNumber, 2) ItemName, 3) ItemNumber, 4) Category, 5) Quantity, 6) Weight 7) Recipient, 8) Final Destination, and 9) Delivery status :\n");
     scanf("%d%s%d%s%d%lf%s%s%s",&Data.Record, Data.ItemName, &Data.ItemNumber, Data.Category, &Data.Quantity, &Data.Weight, Data.Recipient,Data.FinalDestination, Data.Status);
     fflush(stdin);
-    printf(" you have typed %d %s %d %s %d %.2f %s %s %s",Data.Record, Data.ItemName, Data.ItemNumber, Data.Category, Data.Quantity, Data.Weight, Data.Recipient, Data.FinalDestination, Data.Status);
+    //printf(" you have typed %d %s %d %s %d %.2f %s %s %s",Data.Record, Data.ItemName, Data.ItemNumber, Data.Category, Data.Quantity, Data.Weight, Data.Recipient, Data.FinalDestination, Data.Status);
     writeIn(Data);
+    printf("Item added.");
     char typeAgain;
     error:
-    printf("Do you want to add antoher item record (y/n): ");
+    printf("Do you want to add another item record (y/n): ");
     scanf("%c", &typeAgain);
     fflush(stdin);
     switch (typeAgain){
@@ -115,12 +116,15 @@ void replace(char from[]){
 
 void writeIn(struct data structdata){
     FILE *fp = NULL;
-    //fp = fopen("stock.txt", "wt,ccs=UTF-8");
+
+    //replace the string within '_' or '-' to ' '
     replace(structdata.ItemName);
     replace(structdata.Category);
     replace(structdata.Status);
     replace(structdata.Recipient);
     replace(structdata.FinalDestination);
+
+    //Start write in  the file
     fp = fopen("Stock.txt", "w+");
     fprintf(fp,"\n%d\n",structdata.Record);
     fprintf(fp,"%s\n",structdata.ItemName);
