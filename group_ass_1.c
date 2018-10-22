@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 
-int haveData = 0;
+int haveData;
 
 //Main Sections
 
@@ -15,7 +15,7 @@ int main()
     void fileIsEmpty(void);
     void addNewItem(void);
     void displayItem(void);
-    //fileIsEmpty();
+    fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
     MainGUI:
 	printf("1. Add New Item<s> :\n");
@@ -33,28 +33,28 @@ int main()
 	switch (userinput) {
 
         case 1:
-            printf("you have selected 1. Add New Item<s> :\n");
+            printf("you have selected 1. \n[Add New Item<s>]\n\n");
             addNewItem();
             goto MainGUI;
 
         case 2:
-            printf("you have selected 2. Display Item Record<s> :\n");
+            printf("you have selected 2. \n[Display Item Record<s>] \n\n");
             displayItem();
             goto MainGUI;
         case 3:
-            printf("you have selected 3. Search Item Information :\n");
+            printf("you have selected 3. \n[Search Item Information] \n\n");
             goto MainGUI;
 
         case 4:
-            printf("you have selected 4. Modify Item Record<s> :\n");
+            printf("you have selected 4. \n[Modify Item Record<s>] \n\n");
             goto MainGUI;
 
         case 5:
-            printf("you have selected 5. Delete Item Record<s> :\n");
+            printf("you have selected 5. \n[Delete Item Record<s>] \n\n");
             goto MainGUI;
 
         case 0:
-            printf("you have selected 0. Quit The Program");
+            printf("you have selected 0. \n[Quit The Program]\n");
             break;
 
         default:
@@ -123,8 +123,11 @@ void addNewItem(){
 }
 
 void displayItem(){
-    FILE *file = fopen("Stock.txt", "r");
-    getc(file);
+    void showRecords(void);
+    showRecords();
+    printf("\nPress ENTER to go back....\t");
+    getchar();
+    fflush(stdin);
 }
 
 //Functional Sections
@@ -140,10 +143,8 @@ void replace(char from[]){
 }
 
 void fileIsEmpty(){
-    int data;
     FILE *file = fopen("Stock.txt", "r");
-    fscanf(file,"%d",&data);
-    if (!isblank(data)) haveData = 1;
+    fscanf(file,"%d",&haveData);
     fclose(file);
 }
 
@@ -160,7 +161,7 @@ void writeIn(struct data structdata){
     replace(structdata.FinalDestination);
 
     //Start write in  the file
-    fp = fopen("Stock.txt", "a+"); //(haveData ? "a+" : "w+")
+    fp = fopen("Stock.txt", (haveData ? "a+" : "w+"));
     fprintf(fp,"%d\n",structdata.Record);
     fprintf(fp,"%s\n",structdata.ItemName);
     fprintf(fp,"%d\n",structdata.ItemNumber);
@@ -175,7 +176,9 @@ void writeIn(struct data structdata){
     fclose(fp);
 }
 
-void readFile(int recordNumber){
+void showRecords(){
     FILE *file = fopen("Stock.txt", "r");
-    fgetc(file);
+    char data[200];
+    while ()
+    fscanf(file,"%s",data);
 }
