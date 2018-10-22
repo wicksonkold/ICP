@@ -3,13 +3,21 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+
+int haveData = 0;
+
+//Main Sections
+
 int main()
 {
 	int userinput, firstswitch;
 
+    void fileIsEmpty(void);
     void addNewItem(void);
-    MainGUI:
+    void displayItem(void);
+    //fileIsEmpty();
 
+    MainGUI:
 	printf("1. Add New Item<s> :\n");
 	printf("2. Display Item Record<s> :\n");
 	printf("3. Search Item Information :\n");
@@ -31,6 +39,7 @@ int main()
 
         case 2:
             printf("you have selected 2. Display Item Record<s> :\n");
+            displayItem();
             goto MainGUI;
         case 3:
             printf("you have selected 3. Search Item Information :\n");
@@ -71,6 +80,19 @@ struct data{
     char Status[20];
 };
 
+    /*
+     * Examples
+     *
+     * 1002 Japanese_Garden_Pear_Gift_Box 300522 Food 2 4.2 Cheung_Siu_Ming Yuen_Long Arrival
+     *
+     * 1001 ORange_Laptop_Computer_DX5 235524 Electronics 1 1.8 Chan_Tai_Man Mong_Kok Delivery
+     *
+     * 1003 Koppo_Badminton_Racket_GPX-15 77524 Fashion 3 0.6 Lee_Siu_Yu Fortress_Hill Warehouse
+     *
+     */
+
+//Sub Sections
+
 void addNewItem(){
     void writeIn(struct data);
     addNEW:
@@ -81,10 +103,9 @@ void addNewItem(){
     fflush(stdin);
     //printf(" you have typed %d %s %d %s %d %.2f %s %s %s",Data.Record, Data.ItemName, Data.ItemNumber, Data.Category, Data.Quantity, Data.Weight, Data.Recipient, Data.FinalDestination, Data.Status);
     writeIn(Data);
-    printf("Item added.");
     char typeAgain;
     error:
-    printf("Do you want to add another item record (y/n): ");
+    printf("\nDo you want to add another item record (y/n): ");
     scanf("%c", &typeAgain);
     fflush(stdin);
     switch (typeAgain){
@@ -99,25 +120,39 @@ void addNewItem(){
             goto error;
     }
 
-
-    //1002 Japanese-Garden-Pear-Gift-Box 300522 Food 2 4.2 Cheung-Siu-Ming Yuen-Long Arrival
-
 }
+
+void displayItem(){
+    FILE *file = fopen("Stock.txt", "r");
+    getc(file);
+}
+
+//Functional Sections
 
 void replace(char from[]){
     int i = 0;
     while (from[i] != '\0') {
-        if (from[i] == '-' || from[i] == '_') {
+        if (from[i] == '_') {
             from[i] = ' ';
         }
         i++;
     }
 }
 
+void fileIsEmpty(){
+    int data;
+    FILE *file = fopen("Stock.txt", "r");
+    fscanf(file,"%d",&data);
+    if (!isblank(data)) haveData = 1;
+    fclose(file);
+}
+
+//File I/O Sections
+
 void writeIn(struct data structdata){
     FILE *fp = NULL;
 
-    //replace the string within '_' or '-' to ' '
+    //replace the string within '_' to ' '
     replace(structdata.ItemName);
     replace(structdata.Category);
     replace(structdata.Status);
@@ -125,8 +160,8 @@ void writeIn(struct data structdata){
     replace(structdata.FinalDestination);
 
     //Start write in  the file
-    fp = fopen("Stock.txt", "w+");
-    fprintf(fp,"\n%d\n",structdata.Record);
+    fp = fopen("Stock.txt", "a+"); //(haveData ? "a+" : "w+")
+    fprintf(fp,"%d\n",structdata.Record);
     fprintf(fp,"%s\n",structdata.ItemName);
     fprintf(fp,"%d\n",structdata.ItemNumber);
     fprintf(fp,"%s\n",structdata.Category);
@@ -134,7 +169,13 @@ void writeIn(struct data structdata){
     fprintf(fp,"%.1f kg\n",structdata.Weight);
     fprintf(fp,"%s\n",structdata.Recipient);
     fprintf(fp,"%s\n",structdata.FinalDestination);
-    fprintf(fp,"%s\n",structdata.Status);
-    printf("Saved Success");
+    fprintf(fp,"%s\n\n",structdata.Status);
+    printf("\nItem added.");
+    haveData = 1;
     fclose(fp);
+}
+
+void readFile(int recordNumber){
+    FILE *file = fopen("Stock.txt", "r");
+    fgetc(file);
 }
