@@ -5,8 +5,17 @@
 int main(){
 	int min,max,random;
 	printf("Please type a min and max number of guessing: \n");
+	TypeMinMax:
 	scanf("%d%d",&min,&max);
 	fflush(stdin);
+	if ( (min - max) >= 0){
+		printf("your max is not greater than min! please retype.\n");
+		goto TypeMinMax;
+	}
+	if ( (max - min) < 2){
+		printf("you range is too small, we need at least 2 number of range, please retype.\n");
+		goto TypeMinMax;
+	}
 	srand(time(NULL));
 	random = ( rand() % (max-min+1) ) +min;
 	printf("\nDone.");
