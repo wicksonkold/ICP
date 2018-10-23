@@ -16,6 +16,10 @@ int main(){
 		printf("you range is too small, we need at least 2 number of range, please retype.\n");
 		goto TypeMinMax;
 	}
+	int maxguess;
+	printf("Please type max guess times that you think you can success:  ");
+	scanf("%d",&maxguess);
+	fflush(stdin);
 	srand(time(NULL));
 	random = ( rand() % (max-min+1) ) +min;
 	printf("\nDone.");
@@ -38,8 +42,18 @@ int main(){
 		min = guess;
 	}
 	printf("\nWrong number! The range is %d - %d",min,max);
-	goto Guess;
+	if (times != maxguess){
+		goto Guess;
+	} else {
+		goto Failed;
+	}
 	Finish:
 		printf("\nCorrect!!!! \n");
 		printf("You guessed %d times and got success.",times);
+		return 0;
+	Failed:
+		printf("\n\nOh No! You failed the guess!");
+		printf("\nYou have already used %d times to guess and nothing correct :(", times);
+		printf("\nThe correct answer is %d",random);
+		return 0;	
 }
