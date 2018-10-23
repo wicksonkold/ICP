@@ -9,7 +9,7 @@ int main(){
 	scanf("%d%d",&min,&max);
 	fflush(stdin);
 	if ( (min - max) >= 0){
-		printf("your max is not greater than min! please retype.\n");
+		printf("Invaild range! please retype.\n");
 		goto TypeMinMax;
 	}
 	if ( (max - min) < 2){
