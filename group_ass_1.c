@@ -182,24 +182,6 @@ void showRecords(){// Still trying how
     char output;
     struct data showdata;
     while (feof(file)) {
-        fscanf(file,"%d",&showdata.Record);
-        printf(file, "Record: %d\n", showdata.Record);
-        fscanf(file,"%s",&output);
-        printf(file, "ItemName: %s\n", output);
-        fscanf(file,"%d",&showdata.ItemNumber);
-        printf(file, "ItemNumber: %d\n", showdata.ItemNumber);
-        fscanf(file,"%s",&output);
-        printf(file, "Category: %s\n", output);
-        fscanf(file,"%d",&showdata.Quantity);
-        printf(file, "Quantity: %d\n", showdata.Quantity);
-        fscanf(file,"%lf",&showdata.Weight);
-        printf(file, "Weight: %.1f kg\n", showdata.Weight);
-        fscanf(file,"%s",&output);
-        printf(file, "Recipient: %s\n", output);
-        fscanf(file,"%s",showdata.FinalDestination);
-        printf(file, "Designation: %s\n", showdata.FinalDestination);
-        fscanf(file,"%s",showdata.Status);
-        printf(file, "Status: %s\n\n", showdata.Status);
     }
     fclose(file);
 }
