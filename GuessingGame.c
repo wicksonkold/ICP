@@ -3,7 +3,7 @@
 #include <time.h>
 
 
-int main(){
+int maina(){
 	int min,max,random;
 	printf("Please type a min and max number of guessing: \n");
 	TypeMinMax:

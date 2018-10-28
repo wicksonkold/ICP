@@ -125,7 +125,7 @@ void addNewItem(){
 
 void displayItem(){
     void showRecords(void);
-    //showRecords(); This shit not working now.
+    showRecords();
     printf("\nPress ENTER to go back....\t");
     getchar();
     fflush(stdin);
@@ -177,11 +177,46 @@ void writeIn(struct data structdata){
     fclose(fp);
 }
 
-void showRecords(){// Still trying how
+void showRecords(){   // Still trying how
     FILE *file = fopen("Stock.txt", "r");
-    char output;
-    struct data showdata;
-    while (feof(file)) {
+    if (!haveData || !file){
+        printf("There's no data in txt.");
+        return;
     }
+    char String[50];
+    while (fgets(String, 100, file) != NULL) {
+
+        //fgets(String, 100, file);
+        printf("Record: %s", String);
+
+        fgets(String, 100, file);
+        printf("ItemName: %s", String);
+
+        fgets(String, 100, file);
+        printf("ItemNumber: %s", String);
+
+        fgets(String, 100, file);
+        printf("Category: %s", String);
+
+        fgets(String, 100, file);
+        printf("Quantity: %s", String);
+
+        fgets(String, 100, file);
+        printf("Weight: %s", String);
+
+        fgets(String, 100, file);
+        printf("Recipient: %s", String);
+
+        fgets(String, 100, file);
+        printf("Final Destination: %s", String);
+
+        fgets(String, 100, file);
+        printf("Status: %s\n", String);
+
+        fgets(String, 100, file);
+
+    }
+
+
     fclose(file);
 }
