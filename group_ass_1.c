@@ -180,7 +180,7 @@ void writeIn(struct data structdata){
 void showRecords(){   // Still trying how
     FILE *file = fopen("Stock.txt", "r");
     if (!haveData || !file){
-        printf("There's no data in txt.");
+        printf("There's no data in txt.\n");
         return;
     }
     char String[50];
