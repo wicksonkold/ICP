@@ -3,8 +3,9 @@
 #include <time.h>
 
 
-int maina(){
+int main(){
 	int min,max,random;
+	Start:
 	printf("Please type a min and max number of guessing: \n");
 	TypeMinMax:
 	scanf("%d%d",&min,&max);
@@ -51,10 +52,26 @@ int maina(){
 	Finish:
 		printf("\nCorrect!!!! \n");
 		printf("You guessed %d times and got success.",times);
-		return 0;
+		goto PlayAgain;
 	Failed:
 		printf("\n\nOh No! You failed the guess!");
 		printf("\nYou have already used %d times to guess and nothing correct :(", times);
 		printf("\nThe correct answer is %d",random);
-		return 0;	
+		goto PlayAgain;
+		
+	char input;
+	PlayAgain:	
+		printf("\nDo you want to play again ? (Y/N) ");
+		scanf("%c",&input);
+		switch(input){
+			case 'Y':
+			case 'y':
+				goto Start;
+			case 'N':
+			case 'n':
+				return 0;
+			default:
+				printf("Worng input ! \n");
+				goto PlayAgain;		
+		}	
 }
