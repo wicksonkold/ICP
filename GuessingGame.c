@@ -58,7 +58,6 @@ int main(){
 		printf("\nYou have already used %d times to guess and nothing correct :(", times);
 		printf("\nThe correct answer is %d",random);
 		goto PlayAgain;
-		
 	char input;
 	PlayAgain:	
 		printf("\nDo you want to play again ? (Y/N) ");
