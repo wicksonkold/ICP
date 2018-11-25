@@ -25,7 +25,7 @@ int main()
 	printf("4. Modify Item Record<s> :\n");
 	printf("5. Delete Item Record<s> :\n");
 	printf("0. Quit The Program : \n");
-	printf("\nWhat Is Your Option <1-5> ?\n");
+	printf("\nWhat Is Your Option <0-5> ?\n");
 
     type:
 	scanf("%d", &userinput);
@@ -44,7 +44,8 @@ int main()
             goto MainGUI;
         case 3:
             printf("you have selected 3. \n[Search Item Information] \n\n");
-            goto MainGUI;
+            
+		    goto MainGUI;
 
         case 4:
             printf("you have selected 4. \n[Modify Item Record<s>] \n\n");
@@ -99,9 +100,42 @@ void addNewItem(){
     addNEW:
     fflush(stdin);
     //struct data Data;
-    printf("Please enter 1) RecordNumber, 2) ItemName, 3) ItemNumber, 4) Category, 5) Quantity, 6) Weight 7) Recipient, 8) Final Destination, and 9) Delivery status :\n");
-    scanf("%d%s%d%s%d%lf%s%s%s",&Data.Record, Data.ItemName, &Data.ItemNumber, Data.Category, &Data.Quantity, &Data.Weight, Data.Recipient,Data.FinalDestination, Data.Status);
+    printf("1) RecordNumber\nEnter : ");
+    scanf("%d",&Data.Record);
     fflush(stdin);
+    	
+    printf("2) ItemName\nEnter : ");
+    scanf("%s", &Data.ItemName);
+    fflush(stdin);
+    
+    printf("3) ItemNumber\nEnter : ");
+    scanf("%d", &Data.ItemNumber);
+    fflush(stdin);
+    
+    printf("4) Category\nEnter : ");
+    scanf("%s", &Data.Category);
+    fflush(stdin);
+    
+    printf("5) Quantity\nEnter : ");
+    scanf("%d",&Data.Quantity);
+    fflush(stdin);
+    
+    printf("6) Weight\nEnter : ");
+    scanf("%lf",&Data.Weight);
+    fflush(stdin);
+    
+    printf("7) Recipient\nEnter : ");
+    scanf("%s",&Data.Recipient);
+    fflush(stdin);
+    
+    printf("8) Final Destination\nEnter : ");
+    scanf("%s",&Data.FinalDestination);
+    fflush(stdin);
+    
+    printf("9) Delivery status \nEnter : ");
+    scanf("%s",&Data.Status);
+    fflush(stdin);
+    
     //printf(" you have typed %d %s %d %s %d %.2f %s %s %s",Data.Record, Data.ItemName, Data.ItemNumber, Data.Category, Data.Quantity, Data.Weight, Data.Recipient, Data.FinalDestination, Data.Status);
     writeIn(Data);
     char typeAgain;
@@ -163,15 +197,15 @@ void writeIn(struct data structdata){
 
     //Start write in  the file
     fp = fopen("Stock.txt", (haveData ? "a+" : "w+"));
-    fprintf(fp,"%d\n",structdata.Record);
-    fprintf(fp,"%s\n",structdata.ItemName);
-    fprintf(fp,"%d\n",structdata.ItemNumber);
-    fprintf(fp,"%s\n",structdata.Category);
-    fprintf(fp,"%d\n",structdata.Quantity);
-    fprintf(fp,"%.1f kg\n",structdata.Weight);
-    fprintf(fp,"%s\n",structdata.Recipient);
-    fprintf(fp,"%s\n",structdata.FinalDestination);
-    fprintf(fp,"%s\n\n",structdata.Status);
+    fprintf(fp,"Record Number \t\t\t%d\n",structdata.Record);
+    fprintf(fp,"Item Name \t\t\t%s\n",structdata.ItemName);
+    fprintf(fp,"Item Number \t\t\t%d\n",structdata.ItemNumber);
+    fprintf(fp,"Category \t\t\t%s\n",structdata.Category);
+    fprintf(fp,"Quantity \t\t\t%d\n",structdata.Quantity);
+    fprintf(fp,"Weight \t\t\t\t%.1f kg\n",structdata.Weight);
+    fprintf(fp,"Recipient \t\t\t%s\n",structdata.Recipient);
+    fprintf(fp,"Final Destination \t\t%s\n",structdata.FinalDestination);
+    fprintf(fp,"Status \t\t\t\t%s\n\n",structdata.Status);
     printf("\nItem added.");
     haveData = 1;
     fclose(fp);
@@ -184,37 +218,38 @@ void showRecords(){   // Still trying how
         return;
     }
     char String[50];
+  
     while (fgets(String, 100, file) != NULL) {
 
         //fgets(String, 100, file);
-        printf("Record: %s", String);
+        printf("%s", String);
 
         fgets(String, 100, file);
-        printf("ItemName: %s", String);
+        printf("%s", String);
 
         fgets(String, 100, file);
-        printf("ItemNumber: %s", String);
+        printf("%s", String);
 
         fgets(String, 100, file);
-        printf("Category: %s", String);
+        printf("%s", String);
 
         fgets(String, 100, file);
-        printf("Quantity: %s", String);
+        printf("%s", String);
 
         fgets(String, 100, file);
-        printf("Weight: %s", String);
+        printf("%s", String);
 
         fgets(String, 100, file);
-        printf("Recipient: %s", String);
+        printf("%s", String);
 
         fgets(String, 100, file);
-        printf("Final Destination: %s", String);
+        printf("%s", String);
 
         fgets(String, 100, file);
-        printf("Status: %s\n", String);
+        printf("%s\n", String);
 
         fgets(String, 100, file);
-
+		
     }
 
 
