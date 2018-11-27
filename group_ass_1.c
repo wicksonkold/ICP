@@ -168,6 +168,8 @@ void displayItem(){
 
 // search item
 void searchItem(){
+    void searchKeyWord(char*);
+    void searchFromReNum(int);
 
     FILE *file = fopen("Stock.txt","r+");
 
@@ -217,8 +219,6 @@ void searchItem(){
 
     int x = 0;
     char cSearch[100];
-    int sArray[100];
-    char keyword[50];
     char string[99];
 
     switch(input2){
@@ -284,43 +284,7 @@ void searchItem(){
     //search_Record_Number
     //strcat(keyword,(char *)search_Record_Num);
     //fseek(file, 0, SEEK_SET);
-    snprintf(keyword,50,"Record Number \t\t\t%d",search_Record_Num);
-    while(fgets(string,99,file) != NULL){
-        if (strstr(string,keyword)) goto Result;
-    }
-    printf("Nothing found.");
-    goto End;
-
-    Result:
-
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s\n", string);
-
-    fgets(string, 100, file);
-
+    searchFromReNum(search_Record_Num);
     goto End;
 
 
@@ -340,9 +304,9 @@ void searchItem(){
         goto End;
     }
     printf("Which do you want? please type that name of %s",cSearch);
-    gets(string);
+    gets( string );
     fflush(stdin);
-
+    searchKeyWord(string);
 
 
     End:
@@ -449,15 +413,91 @@ void showRecords(){   // Still trying how
     fclose(file);
 }
 
-void searchKeyWord(char keyword[]){
+void searchKeyWord(char keyword[]) {
+    void searchFromReNum(int);
     char search[88];
-    int record[99][99];
-    FILE *file = fopen("Stock.txt","r+");
-    int line = 0, rdnum = 0;
-    while(fgets(search,88,file)!=NULL){
-        if (strstr("Record Number",search)){
-            sscanf(search,"Record Number \t\t\t%d",&rdnum);
+    int record[99][2];
+    int keywordLine[100];
+    FILE *file = fopen("Stock.txt", "r+");
+    int line = 0, rdnum = 0, i = 0, r = 0;
+    while (fgets(search, 88, file) != NULL) {
+        if (strstr("Record Number", search)) {
+            sscanf(search, "Record Number \t\t\t%d", &rdnum);
+            record[i][0] = line;
+            record[i][1] = rdnum;
+        }
+        if (strstr(keyword, search)) {
+            keywordLine[r] = line;
+            r++;
         }
         line++;
     }
+    int first = -1;
+    int recordNumber[100];
+    int w = 0;
+    for (int j = 0; j < i; ++j) {
+        if (first == -1) {
+            first = record[j][0];
+            continue;
+        }
+
+        int next = record[j][0];
+
+        if (keywordLine[j] > first && keywordLine[j] < next) {
+            recordNumber[w] = record[j][1];
+            w++;
+        }
+
+        first = next;
+
+    }
+
+    for (int k = 0; k < w; ++k) {
+        searchFromReNum(k);
+    }
+
+}
+
+ void searchFromReNum(int recordNumber){
+    FILE *file = fopen("Stock.txt","r+");
+    char keyword[50];
+    char string[100];
+    snprintf(keyword,50,"Record Number \t\t\t%d",recordNumber);
+    while(fgets(string,99,file) != NULL){
+        if (strstr(string,keyword)) goto Result;
+    }
+
+    printf("Nothing found.");
+    return;
+
+    Result:
+
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s\n", string);
+
+    fgets(string, 100, file);
+
 }
