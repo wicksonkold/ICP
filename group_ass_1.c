@@ -304,8 +304,8 @@ void searchItem(){
         goto End;
     }
     printf("\nWhich do you want? please type that name of %s\n",cSearch);
-    //gets( string );
-    scanf("%s",string);
+    gets( string );
+    //scanf("%s",string);
     fflush(stdin);
     searchKeyWord(string);
 
