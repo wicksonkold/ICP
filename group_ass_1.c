@@ -304,10 +304,10 @@ void searchItem(){
         goto End;
     }
     printf("\nWhich do you want? please type that name of %s\n",cSearch);
-    gets( string );
+    //gets( string );
+    scanf("%s",string);
     fflush(stdin);
     searchKeyWord(string);
-
 
     End:
 
@@ -426,11 +426,15 @@ void searchKeyWord(char keyword[]) {
             record[i][0] = line;
             record[i][1] = rdnum;
         }
-        if (strstr(keyword, search)) {
+        if (strstr(search, keyword)) {
             keywordLine[r] = line;
             r++;
         }
         line++;
+    }
+    if (r == 0){
+        printf("Nothing found\n");
+        return;
     }
     int first = -1;
     int recordNumber[100];
@@ -453,7 +457,7 @@ void searchKeyWord(char keyword[]) {
     }
 
     for (k = 0; k < w; ++k) {
-        searchFromReNum(k);
+        searchFromReNum(recordNumber[k]);
     }
 
 }
