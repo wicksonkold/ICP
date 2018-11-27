@@ -17,6 +17,7 @@ int main()
     void addNewItem(void);
     void displayItem(void);
     void searchItem(void);
+    void test(void);
     fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
     MainGUI:
@@ -59,7 +60,10 @@ int main()
         case 0:
             printf("you have selected 0. \n[Quit The Program]\n");
             break;
-
+		case 10:
+			printf("test\n");
+			test();
+			goto MainGUI;
         default:
             printf("you have selected a invalid number <%d> PLEASE RETYPE \n", userinput);
             goto type;
@@ -95,6 +99,23 @@ struct data{
  */
 
 //Sub Sections
+
+void test(){
+	struct data structFromRecord(int);
+	int recordnum;
+	printf("type a record num\n");
+	scanf("%d",&recordnum);
+	struct data Data = structFromRecord(recordnum);
+	printf("%d\n",Data.Record);
+	printf("%s\n",Data.ItemName);
+	printf("%d\n",Data.ItemNumber);
+	printf("%s\n",Data.Category);
+	printf("%d\n",Data.Quantity);
+	printf("%.1f\n",Data.Weight);
+	printf("%s\n",Data.Recipient);
+	printf("%s\n",Data.FinalDestination);
+	printf("%s\n",Data.Status);
+}
 
 void addNewItem(){
     void writeIn(struct data);
@@ -531,32 +552,32 @@ struct data structFromRecord(int recordNumber){
     return;
 
     Result:
-
-    printf("%s", data.Record);
-
-    fgets(string, 100, file);
-    printf("%s", data.ItemName);
+    	
+	sscanf(string,"Record Number \t\t\t%d",&data.Record);
 
     fgets(string, 100, file);
-    printf("%s", data.ItemNumber);
+    sscanf(string,"Item Name \t\t\t%s",data.ItemName);
+    
+    fgets(string, 100, file);
+    sscanf(string,"Item Number \t\t\t%d",&data.ItemNumber);
 
     fgets(string, 100, file);
-    printf("%s", data.Category);
+    sscanf(string,"Category \t\t\t%s",data.Category);
 
     fgets(string, 100, file);
-    printf("%s", data.Quantity);
+    sscanf(string,"Quantity \t\t\t%d",&data.Quantity);
 
     fgets(string, 100, file);
-    printf("%s", data.Weight);
+    sscanf(string,"Weight \t\t\t\t%lf kg",&data.Weight);
 
     fgets(string, 100, file);
-    printf("%s", data.Recipient);
+    sscanf(string,"Recipient \t\t\t%s",data.Recipient);
 
     fgets(string, 100, file);
-    printf("%s", data.FinalDestination);
+    sscanf(string,"Final Destination \t\t%s",data.FinalDestination);
 
     fgets(string, 100, file);
-    printf("%s\n", data.Status);
+    sscanf(string,"Status \t\t\t\t%s",data.Status);
     
     return data;
 
