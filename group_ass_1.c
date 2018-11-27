@@ -11,27 +11,28 @@ int haveData;
 
 int main()
 {
-	int userinput, firstswitch;
+    int userinput, firstswitch;
 
     void fileIsEmpty(void);
     void addNewItem(void);
     void displayItem(void);
+    void searchItem(void);
     fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
     MainGUI:
-	printf("1. Add New Item<s> :\n");
-	printf("2. Display Item Record<s> :\n");
-	printf("3. Search Item Information :\n");
-	printf("4. Modify Item Record<s> :\n");
-	printf("5. Delete Item Record<s> :\n");
-	printf("0. Quit The Program : \n");
-	printf("\nWhat Is Your Option <0-5> ?\n");
+    printf("1. Add New Item<s> :\n");
+    printf("2. Display Item Record<s> :\n");
+    printf("3. Search Item Information :\n");
+    printf("4. Modify Item Record<s> :\n");
+    printf("5. Delete Item Record<s> :\n");
+    printf("0. Quit The Program : \n");
+    printf("\nWhat Is Your Option <0-5> ?\n");
 
     type:
-	scanf("%d", &userinput);
+    scanf("%d", &userinput);
     fflush(stdin);
 
-	switch (userinput) {
+    switch (userinput) {
 
         case 1:
             printf("you have selected 1. \n[Add New Item<s>]\n\n");
@@ -44,8 +45,8 @@ int main()
             goto MainGUI;
         case 3:
             printf("you have selected 3. \n[Search Item Information] \n\n");
-            
-		    goto MainGUI;
+            searchItem();
+            goto MainGUI;
 
         case 4:
             printf("you have selected 4. \n[Modify Item Record<s>] \n\n");
@@ -63,12 +64,12 @@ int main()
             printf("you have selected a invalid number <%d> PLEASE RETYPE \n", userinput);
             goto type;
     }
-	
-	
-	
-	
-	return 0;
- }
+
+
+
+
+    return 0;
+}
 
 struct data{
     int Record;
@@ -82,16 +83,16 @@ struct data{
     char Status[20];
 }Data;
 
-    /*
-     * Examples
-     *
-     * 1002 Japanese_Garden_Pear_Gift_Box 300522 Food 2 4.2 Cheung_Siu_Ming Yuen_Long Arrival
-     *
-     * 1001 ORange_Laptop_Computer_DX5 235524 Electronics 1 1.8 Chan_Tai_Man Mong_Kok Delivery
-     *
-     * 1003 Koppo_Badminton_Racket_GPX-15 77524 Fashion 3 0.6 Lee_Siu_Yu Fortress_Hill Warehouse
-     *
-     */
+/*
+ * Examples
+ *
+ * 1002 Japanese_Garden_Pear_Gift_Box 300522 Food 2 4.2 Cheung_Siu_Ming Yuen_Long Arrival
+ *
+ * 1001 ORange_Laptop_Computer_DX5 235524 Electronics 1 1.8 Chan_Tai_Man Mong_Kok Delivery
+ *
+ * 1003 Koppo_Badminton_Racket_GPX-15 77524 Fashion 3 0.6 Lee_Siu_Yu Fortress_Hill Warehouse
+ *
+ */
 
 //Sub Sections
 
@@ -103,39 +104,39 @@ void addNewItem(){
     printf("1) RecordNumber\nEnter : ");
     scanf("%d",&Data.Record);
     fflush(stdin);
-    	
+
     printf("2) ItemName\nEnter : ");
-    scanf("%s", &Data.ItemName);
+    scanf("%s", Data.ItemName);
     fflush(stdin);
-    
+
     printf("3) ItemNumber\nEnter : ");
     scanf("%d", &Data.ItemNumber);
     fflush(stdin);
-    
+
     printf("4) Category\nEnter : ");
-    scanf("%s", &Data.Category);
+    scanf("%s", Data.Category);
     fflush(stdin);
-    
+
     printf("5) Quantity\nEnter : ");
     scanf("%d",&Data.Quantity);
     fflush(stdin);
-    
+
     printf("6) Weight\nEnter : ");
     scanf("%lf",&Data.Weight);
     fflush(stdin);
-    
+
     printf("7) Recipient\nEnter : ");
-    scanf("%s",&Data.Recipient);
+    scanf("%s",Data.Recipient);
     fflush(stdin);
-    
+
     printf("8) Final Destination\nEnter : ");
-    scanf("%s",&Data.FinalDestination);
+    scanf("%s",Data.FinalDestination);
     fflush(stdin);
-    
+
     printf("9) Delivery status \nEnter : ");
-    scanf("%s",&Data.Status);
+    scanf("%s",Data.Status);
     fflush(stdin);
-    
+
     //printf(" you have typed %d %s %d %s %d %.2f %s %s %s",Data.Record, Data.ItemName, Data.ItemNumber, Data.Category, Data.Quantity, Data.Weight, Data.Recipient, Data.FinalDestination, Data.Status);
     writeIn(Data);
     char typeAgain;
@@ -165,6 +166,194 @@ void displayItem(){
     fflush(stdin);
 }
 
+// search item
+void searchItem(){
+
+    FILE *file = fopen("Stock.txt","r+");
+
+    char input;
+    int input2;
+    int search_Record_Num;
+    //search MAIN
+    firstInput:
+    printf("Do you remember what is your Record number? Please enter (Y/N) ");
+    scanf(" %c",&input);
+    fflush(stdin);
+
+    switch (input){
+        case 'y':
+        case 'Y':
+            goto yesInput;
+        case 'n':
+        case 'N':
+            goto noInput;
+        default:
+            printf("INVALID INPUT.... RETYPE...\n");
+            goto firstInput;
+    }
+
+    //first type search, search by Record number
+    yesInput:
+    printf("Please enter your Record number : ");
+    scanf("%d",&search_Record_Num);
+    fflush(stdin);
+    goto searchRN;
+
+    //second type search, search by key category
+    noInput:
+    printf("select what you want to want to search\n");
+    printf("1) Record Number\n");
+    printf("2) ItemName\n");
+    printf("3) ItemNumber  \n");
+    printf("4) Category \n");
+    printf("5) Quantity\n");
+    printf("6) Weight\n");
+    printf("7) Recipient\n");
+    printf("8) Final Destination\n");
+    printf("9) Delivery Status\n");
+    printf("0) Previous Step\n");
+    scanf("%d",&input2);
+    fflush(stdin);
+
+    int x = 0;
+    char cSearch[100];
+    int sArray[100];
+    char keyword[50];
+    char string[99];
+
+    switch(input2){
+        case 1:
+            printf("You have selected Record Number\n\n");
+            strcpy(cSearch,"Record Number");
+            goto searchX;
+
+        case 2:
+            printf("You have selected Item Name\n\n");
+            strcpy(cSearch,"Item Name");
+            goto searchX;
+
+        case 3:
+            printf("You have selected Item Number\n\n");
+            strcpy(cSearch,"Item Number");
+            goto searchX;
+
+        case 4:
+            printf("You have selected Category\n\n");
+            strcpy(cSearch,"Category");
+            goto searchX;
+
+        case 5:
+            printf("You have selected Quantity\n\n");
+            strcpy(cSearch,"Quantity");
+            goto searchX;
+
+        case 6:
+            printf("You have selected Weight\n\n");
+            strcpy(cSearch,"Weight");
+            goto searchX;
+
+        case 7:
+            printf("You have selected Recipient\n\n");
+            strcpy(cSearch,"Recipient");
+            goto searchX;
+
+        case 8:
+            printf("You have selected Final Destination\n\n");
+            strcpy(cSearch,"Final Destination");
+            goto searchX;
+
+        case 9:
+            printf("You have selected Delivery Status\n\n");
+            strcpy(cSearch,"Status");
+            goto searchX;
+
+        case 0:
+            printf("You have selected Previous Step\n\n");
+            goto firstInput;
+        default:
+            printf("INVALID INPUT... RETYPE...\n");
+            goto noInput;
+
+
+
+    }
+
+    //third type search, search by input keyword
+
+    searchRN:
+    //search_Record_Number
+    //strcat(keyword,(char *)search_Record_Num);
+    //fseek(file, 0, SEEK_SET);
+    snprintf(keyword,50,"Record Number \t\t\t%d",search_Record_Num);
+    while(fgets(string,99,file) != NULL){
+        if (strstr(string,keyword)) goto Result;
+    }
+    printf("Nothing found.");
+    goto End;
+
+    Result:
+
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s\n", string);
+
+    fgets(string, 100, file);
+
+    goto End;
+
+
+
+
+
+    searchX:
+
+    while (fgets(string,99,file) != NULL){
+        if (strstr(string,cSearch)){
+            printf("%s",string);
+            x++;
+        }
+    }
+    if (x == 0) {
+        printf("Nothing found");
+        goto End;
+    }
+    printf("Which do you want? please type that name of %s",cSearch);
+    gets(string);
+    fflush(stdin);
+
+
+
+    End:
+
+    fclose(file);
+
+    printf("\nPress ENTER to go back....\t");
+    getchar();
+    fflush(stdin);
+}
+
 //Functional Sections
 
 void replace(char from[]){
@@ -178,8 +367,12 @@ void replace(char from[]){
 }
 
 void fileIsEmpty(){
-    FILE *file = fopen("Stock.txt", "r");
-    fscanf(file,"%d",&haveData);
+    FILE *file = fopen("Stock.txt", "r+");
+    char string[30];
+    if (file == NULL) return;
+    if (strcmp(fgets(string,30,file),"\n") != 0) {
+        haveData = 1;
+    }
     fclose(file);
 }
 
@@ -218,7 +411,7 @@ void showRecords(){   // Still trying how
         return;
     }
     char String[50];
-  
+
     while (fgets(String, 100, file) != NULL) {
 
         //fgets(String, 100, file);
@@ -249,9 +442,22 @@ void showRecords(){   // Still trying how
         printf("%s\n", String);
 
         fgets(String, 100, file);
-		
+
     }
 
 
     fclose(file);
+}
+
+void searchKeyWord(char keyword[]){
+    char search[88];
+    int record[99][99];
+    FILE *file = fopen("Stock.txt","r+");
+    int line = 0, rdnum = 0;
+    while(fgets(search,88,file)!=NULL){
+        if (strstr("Record Number",search)){
+            sscanf(search,"Record Number \t\t\t%d",&rdnum);
+        }
+        line++;
+    }
 }
