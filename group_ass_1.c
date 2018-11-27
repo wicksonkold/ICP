@@ -303,7 +303,7 @@ void searchItem(){
         printf("Nothing found");
         goto End;
     }
-    printf("Which do you want? please type that name of %s",cSearch);
+    printf("\nWhich do you want? please type that name of %s\n",cSearch);
     gets( string );
     fflush(stdin);
     searchKeyWord(string);
@@ -434,8 +434,8 @@ void searchKeyWord(char keyword[]) {
     }
     int first = -1;
     int recordNumber[100];
-    int w = 0;
-    for (int j = 0; j < i; ++j) {
+    int w = 0, j, k;
+    for (j = 0; j < i; ++j) {
         if (first == -1) {
             first = record[j][0];
             continue;
@@ -452,7 +452,7 @@ void searchKeyWord(char keyword[]) {
 
     }
 
-    for (int k = 0; k < w; ++k) {
+    for (k = 0; k < w; ++k) {
         searchFromReNum(k);
     }
 
