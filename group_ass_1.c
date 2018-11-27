@@ -452,7 +452,7 @@ void searchKeyWord(char keyword[]) {
         
 		int key = 0;
 		while (key < r){
-        	if (keywordLine[key] >= first && keywordLine[key] <= next) {
+        	if (keywordLine[key] >= first && keywordLine[key] < next) {
             	recordNumber[w] = record[j][1];
             	w++;
 
