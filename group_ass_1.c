@@ -421,10 +421,11 @@ void searchKeyWord(char keyword[]) {
     FILE *file = fopen("Stock.txt", "r+");
     int line = 0, rdnum = 0, i = 0, r = 0;
     while (fgets(search, 88, file) != NULL) {
-        if (strstr("Record Number", search)) {
+        if (strstr(search,"Record Number")) {
             sscanf(search, "Record Number \t\t\t%d", &rdnum);
             record[i][0] = line;
             record[i][1] = rdnum;
+            i++;
         }
         if (strstr(search, keyword)) {
             keywordLine[r] = line;
@@ -436,27 +437,39 @@ void searchKeyWord(char keyword[]) {
         printf("Nothing found\n");
         return;
     }
+    
+    
     int first = -1;
     int recordNumber[100];
     int w = 0, j, k;
-    for (j = 0; j < i; ++j) {
+    for (j = 0; j < i; j++) {
         if (first == -1) {
             first = record[j][0];
             continue;
         }
 
         int next = record[j][0];
+        
+		int key = 0;
+		while (key < r){
+        	if (keywordLine[key] >= first && keywordLine[key] <= next) {
+            	recordNumber[w] = record[j][1];
+            	w++;
 
-        if (keywordLine[j] > first && keywordLine[j] < next) {
-            recordNumber[w] = record[j][1];
-            w++;
-        }
+            	break;
+        	}
+        	key++;
+    	}
+        
+        
 
         first = next;
 
     }
+    
+	if (w > 0) printf("\nFound it ! We are listing the items...\n\n");
 
-    for (k = 0; k < w; ++k) {
+    for (k = 0; k < w; k++) {
         searchFromReNum(recordNumber[k]);
     }
 
