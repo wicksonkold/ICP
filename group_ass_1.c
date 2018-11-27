@@ -514,6 +514,50 @@ void searchKeyWord(char keyword[]) {
     fgets(string, 100, file);
     printf("%s\n", string);
 
+}
+
+
+struct data structFromRecord(int recordNumber){
+	struct data data;
+    FILE *file = fopen("Stock.txt","r+");
+    char keyword[50];
+    char string[100];
+    snprintf(keyword,50,"Record Number \t\t\t%d",recordNumber);
+    while(fgets(string,99,file) != NULL){
+        if (strstr(string,keyword)) goto Result;
+    }
+
+    printf("Nothing found.");
+    return;
+
+    Result:
+
+    printf("%s", data.Record);
+
     fgets(string, 100, file);
+    printf("%s", data.ItemName);
+
+    fgets(string, 100, file);
+    printf("%s", data.ItemNumber);
+
+    fgets(string, 100, file);
+    printf("%s", data.Category);
+
+    fgets(string, 100, file);
+    printf("%s", data.Quantity);
+
+    fgets(string, 100, file);
+    printf("%s", data.Weight);
+
+    fgets(string, 100, file);
+    printf("%s", data.Recipient);
+
+    fgets(string, 100, file);
+    printf("%s", data.FinalDestination);
+
+    fgets(string, 100, file);
+    printf("%s\n", data.Status);
+    
+    return data;
 
 }
