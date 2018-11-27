@@ -441,7 +441,7 @@ void searchKeyWord(char keyword[]) {
     
     int first = -1;
     int recordNumber[100];
-    int w = 0, j, k;
+    int w = 0, j, k, z = 0;
     for (j = 0; j < i; j++) {
         if (first == -1) {
             first = record[j][0];
@@ -453,9 +453,8 @@ void searchKeyWord(char keyword[]) {
 		int key = 0;
 		while (key < r){
         	if (keywordLine[key] >= first && keywordLine[key] < next) {
-            	recordNumber[w] = record[j][1];
+            	recordNumber[w] = record[z][1];
             	w++;
-
             	break;
         	}
         	key++;
@@ -464,7 +463,7 @@ void searchKeyWord(char keyword[]) {
         
 
         first = next;
-
+		z++;
     }
     
 	if (w > 0) printf("\nFound it ! We are listing the items...\n\n");
