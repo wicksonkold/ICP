@@ -190,6 +190,7 @@ void displayItem(){
 // search item
 void searchItem(){
     void searchKeyWord(char*);
+    void searchName(char *,char *);
     void searchFromReNum(int);
 
     FILE *file = fopen("Stock.txt","r+");
@@ -302,9 +303,6 @@ void searchItem(){
     //third type search, search by input keyword
 
     searchRN:
-    //search_Record_Number
-    //strcat(keyword,(char *)search_Record_Num);
-    //fseek(file, 0, SEEK_SET);
     searchFromReNum(search_Record_Num);
     goto End;
 
@@ -324,11 +322,41 @@ void searchItem(){
         printf("Nothing found");
         goto End;
     }
-    printf("\nWhich do you want? please type that name of %s\n",cSearch);
-    gets( string );
-    //scanf("%s",string);
+    char ans;
+    ask:
+    printf("Do you want to open strict mode ? (Y/N/?)\n");
+    scanf("%c",&ans);
     fflush(stdin);
-    searchKeyWord(string);
+
+    switch (ans){
+        case 'Y':
+        case 'y':
+        case 'N':
+        case 'n':
+        case '?':
+            break;
+        default:
+            printf("Invalid input.\n");
+            goto ask;
+    }
+
+    if (ans == '?'){
+        printf("\nWhat is Strict mode ?\n");
+        printf("   Strict mode is to search a record by a full completed name.\n");
+        printf("   Instead of keyword, if there are no fully matched name in those records, it won't show anything.\n");
+        printf("   If you use keyword, then any records which containing that word will also show at the result list.\n\n");
+        goto ask;
+    }
+
+    printf("\nWhich do you want? please type that %s of %s\n",(ans == 'Y' || ans == 'y' ? "name" : "keyword"),cSearch);
+    gets( string );
+    fflush(stdin);
+
+    if (ans == 'N' || ans == 'n') {
+        searchKeyWord(string);
+    } else {
+        searchName(cSearch,string);
+    }
 
     End:
 
@@ -495,45 +523,109 @@ void searchKeyWord(char keyword[]) {
 
 }
 
- void searchFromReNum(int recordNumber){
-    FILE *file = fopen("Stock.txt","r+");
-    char keyword[50];
-    char string[100];
-    snprintf(keyword,50,"Record Number \t\t\t%d",recordNumber);
-    while(fgets(string,99,file) != NULL){
-        if (strstr(string,keyword)) goto Result;
+void searchFromReNum(int recordNumber){
+   FILE *file = fopen("Stock.txt","r+");
+   char keyword[50];
+   char string[100];
+   snprintf(keyword,50,"Record Number \t\t\t%d",recordNumber);
+   while(fgets(string,99,file) != NULL){
+       if (strstr(string,keyword)) goto Result;
+   }
+
+   printf("Nothing found.");
+   return;
+
+   Result:
+
+   printf("%s", string);
+
+   fgets(string, 100, file);
+   printf("%s", string);
+
+   fgets(string, 100, file);
+   printf("%s", string);
+
+   fgets(string, 100, file);
+   printf("%s", string);
+
+   fgets(string, 100, file);
+   printf("%s", string);
+
+   fgets(string, 100, file);
+   printf("%s", string);
+
+   fgets(string, 100, file);
+   printf("%s", string);
+
+   fgets(string, 100, file);
+   printf("%s", string);
+
+   fgets(string, 100, file);
+   printf("%s\n", string);
+
+}
+
+void searchName(char type[], char keyword[]) {
+    char search[88];
+    int record[99][2];
+    int keywordLine[100];
+    char name[99];
+    snprintf(name,99,"%s \t\t\t%s\n",type,keyword);
+    FILE *file = fopen("Stock.txt", "r+");
+    int line = 0, rdnum = 0, i = 0, r = 0;
+    while (fgets(search, 88, file) != NULL) {
+        if (strstr(search,"Record Number")) {
+            sscanf(search, "Record Number \t\t\t%d", &rdnum);
+            record[i][0] = line;
+            record[i][1] = rdnum;
+            i++;
+        }
+
+        if (strcmp(name, search) == 0) {
+            keywordLine[r] = line;
+            r++;
+        }
+
+        line++;
+    }
+    if (r == 0){
+        printf("Nothing found\n");
+        return;
     }
 
-    printf("Nothing found.");
-    return;
 
-    Result:
+    int first = -1;
+    int recordNumber[100];
+    int w = 0, j, k, z = 0;
+    for (j = 0; j < i; j++) {
+        if (first == -1) {
+            first = record[j][0];
+            continue;
+        }
 
-    printf("%s", string);
+        int next = record[j][0];
 
-    fgets(string, 100, file);
-    printf("%s", string);
+        int key = 0;
+        while (key < r){
+            if (keywordLine[key] >= first && keywordLine[key] < next) {
+                recordNumber[w] = record[z][1];
+                w++;
+                break;
+            }
+            key++;
+        }
 
-    fgets(string, 100, file);
-    printf("%s", string);
 
-    fgets(string, 100, file);
-    printf("%s", string);
 
-    fgets(string, 100, file);
-    printf("%s", string);
+        first = next;
+        z++;
+    }
 
-    fgets(string, 100, file);
-    printf("%s", string);
+    if (w > 0) printf("\nFound it ! We are listing the items...\n\n");
 
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s\n", string);
+    for (k = 0; k < w; k++) {
+        searchFromReNum(recordNumber[k]);
+    }
 
 }
 
@@ -549,7 +641,7 @@ struct data structFromRecord(int recordNumber){
     }
 
     printf("Nothing found.");
-    return;
+    return data;
 
     Result:
     	
