@@ -17,7 +17,9 @@ int main()
     void addNewItem(void);
     void displayItem(void);
     void searchItem(void);
+    void modify(void);
     void test(void);
+    void enter(void);
     fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
     MainGUI:
@@ -32,7 +34,8 @@ int main()
     type:
     scanf("%d", &userinput);
     fflush(stdin);
-
+	system("cls");
+	
     switch (userinput) {
 
         case 1:
@@ -51,7 +54,8 @@ int main()
 
         case 4:
             printf("you have selected 4. \n[Modify Item Record<s>] \n\n");
-            goto MainGUI;
+            modify();
+			goto MainGUI;
 
         case 5:
             printf("you have selected 5. \n[Delete Item Record<s>] \n\n");
@@ -115,48 +119,16 @@ void test(){
 	printf("%s\n",Data.Recipient);
 	printf("%s\n",Data.FinalDestination);
 	printf("%s\n",Data.Status);
+	
 }
 
 void addNewItem(){
     void writeIn(struct data);
+    void enter();
     addNEW:
     fflush(stdin);
     //struct data Data;
-    printf("1) RecordNumber\nEnter : ");
-    scanf("%d",&Data.Record);
-    fflush(stdin);
-
-    printf("2) ItemName\nEnter : ");
-    scanf("%s", Data.ItemName);
-    fflush(stdin);
-
-    printf("3) ItemNumber\nEnter : ");
-    scanf("%d", &Data.ItemNumber);
-    fflush(stdin);
-
-    printf("4) Category\nEnter : ");
-    scanf("%s", Data.Category);
-    fflush(stdin);
-
-    printf("5) Quantity\nEnter : ");
-    scanf("%d",&Data.Quantity);
-    fflush(stdin);
-
-    printf("6) Weight\nEnter : ");
-    scanf("%lf",&Data.Weight);
-    fflush(stdin);
-
-    printf("7) Recipient\nEnter : ");
-    scanf("%s",Data.Recipient);
-    fflush(stdin);
-
-    printf("8) Final Destination\nEnter : ");
-    scanf("%s",Data.FinalDestination);
-    fflush(stdin);
-
-    printf("9) Delivery status \nEnter : ");
-    scanf("%s",Data.Status);
-    fflush(stdin);
+    enter();
 
     //printf(" you have typed %d %s %d %s %d %.2f %s %s %s",Data.Record, Data.ItemName, Data.ItemNumber, Data.Category, Data.Quantity, Data.Weight, Data.Recipient, Data.FinalDestination, Data.Status);
     writeIn(Data);
@@ -177,6 +149,46 @@ void addNewItem(){
             goto error;
     }
 
+	system("cls");
+}
+
+void enter(){
+	
+	printf("1) RecordNumber\nEnter : ");
+    scanf("%d",&Data.Record);
+    fflush(stdin);
+
+    printf("2) ItemName\nEnter : ");
+    gets(Data.ItemName);
+    fflush(stdin);
+
+    printf("3) ItemNumber\nEnter : ");
+    scanf("%d", &Data.ItemNumber);
+    fflush(stdin);
+
+    printf("4) Category\nEnter : ");
+    gets(Data.Category);
+    fflush(stdin);
+
+    printf("5) Quantity\nEnter : ");
+    scanf("%d",&Data.Quantity);
+    fflush(stdin);
+
+    printf("6) Weight\nEnter : ");
+    scanf("%lf",&Data.Weight);
+    fflush(stdin);
+
+    printf("7) Recipient\nEnter : ");
+    gets(Data.Recipient);
+    fflush(stdin);
+
+    printf("8) Final Destination\nEnter : ");
+    gets(Data.FinalDestination);
+    fflush(stdin);
+
+    printf("9) Delivery status \nEnter : ");
+    gets(Data.Status);
+    fflush(stdin);
 }
 
 void displayItem(){
@@ -185,6 +197,7 @@ void displayItem(){
     printf("\nPress ENTER to go back....\t");
     getchar();
     fflush(stdin);
+    //system("cls");
 }
 
 // search item
@@ -367,6 +380,91 @@ void searchItem(){
     fflush(stdin);
 }
 
+//modify
+
+void modify(){
+	void displayItem();
+	void searchFromReNum();
+	void showRecords();
+	void modify2();
+	
+	char input;
+	int  input2;
+	int search_Record_Num;
+	
+	FILE *file = fopen("Stock.txt","r+");
+	
+	firstInput:
+		printf("Do you remember the Record Number?\nPlease Enter : Y / N \n");
+			scanf("%c",&input);
+				fflush(stdin);
+	
+	    switch (input){
+	        case 'y':
+	        case 'Y':
+	            goto yesInput;
+	        case 'n':
+	        case 'N':
+	            goto noInput;
+	        default:
+	            printf("INVALID INPUT.... RETYPE...\n");
+	            goto firstInput;
+	    }
+	    
+	noInput:
+		showRecords();
+			goto yesInput;
+
+	yesInput:
+    	printf("Please enter your Record number : ");
+    		scanf("%d",&search_Record_Num);
+    			fflush(stdin);
+						searchFromReNum(search_Record_Num);
+	    
+	   
+	
+}
+ /*
+void modify2(){
+	void replace();
+	void writeIn();
+	FILE *fp = fopen("Stock.txt","a+");
+	FILE *nf = fopen("TemStock.txt","a+");
+	 
+	c = fgetc(fp); 
+	    while (c != EOF){ 
+	        fputc(c, nf); 
+	        c = fgetc(fp); 
+	    } 
+	
+	printf("hiiiiii here is modify 2 , i want to get data and change it hereeeee\n\n\n\n\n\n");
+	
+	//get enter function
+	enter();
+    
+    fclose(fp);
+    fclose(nf);
+    
+    //delete & replace
+       int ret;
+	   char oldname[] = "TemStock.txt";
+	   char newname[] = "Stock.txt";
+	   
+	   ret = rename(oldname, newname);
+		
+	   if(ret == 0) {
+	      printf("File renamed successfully");
+	   } else {
+	      printf("Error: unable to rename the file");
+	   }
+        
+    // REMAKE A FILE I/O and SEARCH FOR THE NEW FILE AND RENAME 
+    // REPLACE THE OLD 
+    // 
+    
+}
+*/
+
 //Functional Sections
 
 void replace(char from[]){
@@ -524,44 +622,65 @@ void searchKeyWord(char keyword[]) {
 }
 
 void searchFromReNum(int recordNumber){
-   FILE *file = fopen("Stock.txt","r+");
-   char keyword[50];
-   char string[100];
-   snprintf(keyword,50,"Record Number \t\t\t%d",recordNumber);
-   while(fgets(string,99,file) != NULL){
-       if (strstr(string,keyword)) goto Result;
-   }
+    FILE *file = fopen("Stock.txt","r+");
+    char keyword[50];
+    char string[100];
+    snprintf(keyword,50,"Record Number \t\t\t%d",recordNumber);
+    while(fgets(string,99,file) != NULL){
+        if (strstr(string,keyword)) goto Result;
+    }
 
-   printf("Nothing found.");
-   return;
+    printf("Nothing found.");
+    return;
+	
+    Result:
+	
+	system("cls");
+	
+    printf("%s", string);
 
-   Result:
+    fgets(string, 100, file);
+    printf("%s", string);
 
-   printf("%s", string);
+    fgets(string, 100, file);
+    printf("%s", string);
 
-   fgets(string, 100, file);
-   printf("%s", string);
+    fgets(string, 100, file);
+    printf("%s", string);
 
-   fgets(string, 100, file);
-   printf("%s", string);
+    fgets(string, 100, file);
+    printf("%s", string);
 
-   fgets(string, 100, file);
-   printf("%s", string);
+    fgets(string, 100, file);
+    printf("%s", string);
 
-   fgets(string, 100, file);
-   printf("%s", string);
+    fgets(string, 100, file);
+    printf("%s", string);
 
-   fgets(string, 100, file);
-   printf("%s", string);
+    fgets(string, 100, file);
+    printf("%s", string);
 
-   fgets(string, 100, file);
-   printf("%s", string);
-
-   fgets(string, 100, file);
-   printf("%s", string);
-
-   fgets(string, 100, file);
-   printf("%s\n", string);
+    fgets(string, 100, file);
+    printf("%s\n", string);
+    
+	printf("_____________________________________________________________________________________\n\n");
+	char input;
+	firstInput:
+		printf("do you want to modify this data?\nPlease Enter (Y/N)\n");
+		scanf("%c",&input);
+		switch (input){
+		        case 'y':
+		        case 'Y':
+		            //modify2();
+		        case 'n':
+		        case 'N':
+		            goto noInput;
+		        default:
+		            printf("INVALID INPUT.... RETYPE...\n");
+		            goto firstInput;
+	}
+	noInput:
+		printf(" ");
 
 }
 
@@ -641,7 +760,7 @@ struct data structFromRecord(int recordNumber){
     }
 
     printf("Nothing found.");
-    return data;
+    return;
 
     Result:
     	
