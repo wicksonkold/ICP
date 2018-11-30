@@ -19,6 +19,7 @@ int main()
     void searchItem(void);
     void modify(void);
     void test(void);
+    void enter(void);
     fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
     MainGUI:
@@ -123,10 +124,37 @@ void test(){
 
 void addNewItem(){
     void writeIn(struct data);
+    void enter();
     addNEW:
     fflush(stdin);
     //struct data Data;
-    printf("1) RecordNumber\nEnter : ");
+    enter();
+
+    //printf(" you have typed %d %s %d %s %d %.2f %s %s %s",Data.Record, Data.ItemName, Data.ItemNumber, Data.Category, Data.Quantity, Data.Weight, Data.Recipient, Data.FinalDestination, Data.Status);
+    writeIn(Data);
+    char typeAgain;
+    error:
+    printf("\nDo you want to add another item record (y/n): ");
+    scanf("%c", &typeAgain);
+    fflush(stdin);
+    switch (typeAgain){
+        case 'y':
+        case 'Y':
+            goto addNEW;
+        case 'n':
+        case 'N':
+            break;
+        default:
+            printf("Unknown input.\n");
+            goto error;
+    }
+
+	system("cls");
+}
+
+void enter(){
+	
+	printf("1) RecordNumber\nEnter : ");
     scanf("%d",&Data.Record);
     fflush(stdin);
 
@@ -161,27 +189,6 @@ void addNewItem(){
     printf("9) Delivery status \nEnter : ");
     gets(Data.Status);
     fflush(stdin);
-
-    //printf(" you have typed %d %s %d %s %d %.2f %s %s %s",Data.Record, Data.ItemName, Data.ItemNumber, Data.Category, Data.Quantity, Data.Weight, Data.Recipient, Data.FinalDestination, Data.Status);
-    writeIn(Data);
-    char typeAgain;
-    error:
-    printf("\nDo you want to add another item record (y/n): ");
-    scanf("%c", &typeAgain);
-    fflush(stdin);
-    switch (typeAgain){
-        case 'y':
-        case 'Y':
-            goto addNEW;
-        case 'n':
-        case 'N':
-            break;
-        default:
-            printf("Unknown input.\n");
-            goto error;
-    }
-
-	system("cls");
 }
 
 void displayItem(){
@@ -390,57 +397,46 @@ void modify(){
 	   
 	
 }
-
+/* 
 void modify2(){
 	void replace();
 	void writeIn();
-	FILE *fp = fopen("Stock.txt","w+");
+	FILE *fp = fopen("Stock.txt","a+");
+	FILE *nf = fopen("TemStock.txt","a+");
+	 
+	c = fgetc(fp); 
+	    while (c != EOF){ 
+	        fputc(c, nf); 
+	        c = fgetc(fp); 
+	    } 
 	
 	printf("hiiiiii here is modify 2 , i want to get data and change it hereeeee\n\n\n\n\n\n");
 	
-	printf("1) RecordNumber\nEnter : ");
-    scanf("%d",&Data.Record);
-    fflush(stdin);
-
-    printf("2) ItemName\nEnter : ");
-    gets(Data.ItemName);
-    fflush(stdin);
-
-    printf("3) ItemNumber\nEnter : ");
-    scanf("%d", &Data.ItemNumber);
-    fflush(stdin);
-
-    printf("4) Category\nEnter : ");
-    gets(Data.Category);
-    fflush(stdin);
-
-    printf("5) Quantity\nEnter : ");
-    scanf("%d",&Data.Quantity);
-    fflush(stdin);
-
-    printf("6) Weight\nEnter : ");
-    scanf("%lf",&Data.Weight);
-    fflush(stdin);
-
-    printf("7) Recipient\nEnter : ");
-    gets(Data.Recipient);
-    fflush(stdin);
-
-    printf("8) Final Destination\nEnter : ");
-    gets(Data.FinalDestination);
-    fflush(stdin);
-
-    printf("9) Delivery status \nEnter : ");
-    gets(Data.Status);
-    fflush(stdin);
+	//get enter function
+	enter();
     
-    writeIn();
+    fclose(fp);
+    fclose(nf);
     
+    //delete & replace
+       int ret;
+	   char oldname[] = "TemStock.txt";
+	   char newname[] = "Stock.txt";
+	   
+	   ret = rename(oldname, newname);
+		
+	   if(ret == 0) {
+	      printf("File renamed successfully");
+	   } else {
+	      printf("Error: unable to rename the file");
+	   }
+        
     // REMAKE A FILE I/O and SEARCH FOR THE NEW FILE AND RENAME 
     // REPLACE THE OLD 
     // 
+    
 }
-
+*/
 
 //Functional Sections
 
@@ -648,7 +644,7 @@ void searchKeyWord(char keyword[]) {
 		switch (input){
 		        case 'y':
 		        case 'Y':
-		            modify2();
+		            //modify2();
 		        case 'n':
 		        case 'N':
 		            goto noInput;
