@@ -194,7 +194,7 @@ struct data enterData(){
 void displayItem(){
     void showRecords(void);
     showRecords();
-    printf("\nPress ENTER to go back....\t");
+    printf("\nPress ENTER to go back....");
     getchar();
     fflush(stdin);
     //system("cls");
@@ -202,7 +202,7 @@ void displayItem(){
 
 // search item
 void searchItem(){
-    void searchKeyWord(char*);
+    void searchKeyWord(char*, char*);
     void searchName(char *,char *);
     void searchFromReNum(int);
 
@@ -213,7 +213,7 @@ void searchItem(){
     int search_Record_Num;
     //search MAIN
     firstInput:
-    printf("Do you remember what is your Record number? Please enterData (Y/N) ");
+    printf("Do you remember what is your Record number? Please enter (Y/N) ");
     scanf(" %c",&input);
     fflush(stdin);
 
@@ -231,7 +231,7 @@ void searchItem(){
 
     //first type search, search by Record number
     yesInput:
-    printf("Please enterData your Record number : ");
+    printf("Please enter your Record number : ");
     scanf("%d",&search_Record_Num);
     fflush(stdin);
     goto searchRN;
@@ -366,7 +366,7 @@ void searchItem(){
     fflush(stdin);
 
     if (ans == 'N' || ans == 'n') {
-        searchKeyWord(string);
+        searchKeyWord(cSearch,string);
     } else {
         searchName(cSearch,string);
     }
@@ -375,7 +375,7 @@ void searchItem(){
 
     fclose(file);
 
-    printf("\nPress ENTER to go back....\t");
+    printf("\nPress ENTER to go back....");
     getchar();
     fflush(stdin);
 }
@@ -413,24 +413,24 @@ void modify(){
 		showRecords();
 
 	yesInput:
-    	printf("\nPlease enterData your Record number : ");
+    	printf("\nPlease enter your Record number : ");
     	scanf("%d",&search_Record_Num);
     	fflush(stdin);
 
     modifyRecord(search_Record_Num);
 
-    printf("\nPress ENTER to go back....\t");
+    printf("\nPress ENTER to go back....");
     getchar();
     fflush(stdin);
 
 }
 
 void modifyRecord(int recordNum){
-    FILE *file = fopen("Stock.txt","r");
+    FILE *file = fopen("Stock.txt","rt+");
     char string[99];
     int record;
     while (fgets(string,99,file) != NULL){
-        sscanf(string,"Record Number \t\t\t%d\n",&record);
+        sscanf(string,"Record Number: %d\n",&record);
         if (record == recordNum){
             goto result;
         }
@@ -532,30 +532,34 @@ void modifyRecord(int recordNum){
     gets( editTo );
     fflush(stdin);
 
-    freopen("Stock.txt","r+",file);
+    //freopen("Stock.txt","r+",file);
+    fseek(file,0,SEEK_SET);
     while (fgets(string,99,file) != NULL){
-        sscanf(string,"Record Number \t\t\t%d\n",&record);
+        sscanf(string,"Record Number: %d\n",&record);
         if (record == recordNum){
+            long loc = 0;
             while (strcmp(string,"") != 0){
                 fgets(string,99,file);
                 //printf("string is now %s\n",string);
                 if (strstr(string,edit)) {
-                    //printf("\n\tfound edit target %s in %s\n",edit,string);
-                    char input[50];
-                    snprintf(input, 50,"%s \t\t\t%s\n", edit, editTo);
-                    fputs("",file);
+                    //printf("\nfound edit target %s in %s\n",edit,string);
+                    //fwrite(input, strlen(input), sizeof(ftell(file)),file);
+                    char input[99];
+                    sprintf(input,"%s: %s",edit,editTo);
+                    fseek(file,loc,SEEK_SET);
+                    fprintf(file,"\0");
                     fputs(input,file);
-                    //fwrite(input, sizeof(input),1,file);
                     printf("Successfully edited %s to '%s'\n\n", edit, editTo);
                     break;
                 }
+                loc = ftell(file);
 
             }
             break;
         }
     }
 
-
+    fflush(file);
     fclose(file);
 }
 //Functional Sections
@@ -595,21 +599,21 @@ void writeIn(struct data structdata){
 
     //Start write in  the file
     fp = fopen("Stock.txt", (haveData ? "a+" : "w+"));
-    fprintf(fp,"Record Number \t\t\t%d\n",structdata.Record);
-    fprintf(fp,"Item Name \t\t\t%s\n",structdata.ItemName);
-    fprintf(fp,"Item Number \t\t\t%d\n",structdata.ItemNumber);
-    fprintf(fp,"Category \t\t\t%s\n",structdata.Category);
-    fprintf(fp,"Quantity \t\t\t%d\n",structdata.Quantity);
-    fprintf(fp,"Weight \t\t\t\t%.1f kg\n",structdata.Weight);
-    fprintf(fp,"Recipient \t\t\t%s\n",structdata.Recipient);
-    fprintf(fp,"Final Destination \t\t%s\n",structdata.FinalDestination);
-    fprintf(fp,"Status \t\t\t\t%s\n\n",structdata.Status);
+    fprintf(fp,"Record Number: %d\n",structdata.Record);
+    fprintf(fp,"Item Name: %s\n",structdata.ItemName);
+    fprintf(fp,"Item Number: %d\n",structdata.ItemNumber);
+    fprintf(fp,"Category: %s\n",structdata.Category);
+    fprintf(fp,"Quantity: %d\n",structdata.Quantity);
+    fprintf(fp,"Weight: %.1f kg\n",structdata.Weight);
+    fprintf(fp,"Recipient: %s\n",structdata.Recipient);
+    fprintf(fp,"Final Destination: %s\n",structdata.FinalDestination);
+    fprintf(fp,"Status: %s\n\n",structdata.Status);
     printf("\nItem added.");
     haveData = 1;
     fclose(fp);
 }
 
-void showRecords(){   // Still trying how
+void showRecords(){
     FILE *file = fopen("Stock.txt", "r");
     if (!haveData || !file){
         printf("There's no data in txt.\n");
@@ -654,31 +658,44 @@ void showRecords(){   // Still trying how
     fclose(file);
 }
 
-void searchKeyWord(char keyword[]) {
+void searchKeyWord(char name[],char keyword[]) {
     void searchFromReNum(int);
     char search[88];
     int record[99][2];
     int keywordLine[100];
+    char match[99];
+    sprintf(match,"%s: %s",name,keyword);
     FILE *file = fopen("Stock.txt", "r+");
     int line = 0, rdnum = 0, i = 0, r = 0;
     while (fgets(search, 88, file) != NULL) {
         if (strstr(search,"Record Number")) {
-            sscanf(search, "Record Number \t\t\t%d", &rdnum);
+            sscanf(search, "Record Number: %d", &rdnum);
             record[i][0] = line;
             record[i][1] = rdnum;
             i++;
         }
-        if (strstr(search, keyword)) {
+
+        if (strstr(search, match)) {
             keywordLine[r] = line;
             r++;
         }
+
         line++;
+
     }
+    if (i > 0) {
+        i+=1;
+        record[i][0] = line;
+        record[i][1] = rdnum;
+    }
+
+
     if (r == 0){
         printf("Nothing found\n");
         return;
     }
-    
+
+    //printf("r is now %d\n",r);
     
     int first = -1;
     int recordNumber[100];
@@ -690,14 +707,17 @@ void searchKeyWord(char keyword[]) {
         }
 
         int next = record[j][0];
-        
+        if (next == 0) next += first + 2;
 		int key = 0;
 		while (key < r){
-        	if (keywordLine[key] >= first && keywordLine[key] < next) {
+		    //printf("first: %d, next: %d\n",first,next);
+		    //printf("keyline: %d\n",keywordLine[key]);
+        	if (keywordLine[key] >= first && keywordLine[key] < next){
             	recordNumber[w] = record[z][1];
             	w++;
             	break;
         	}
+
         	key++;
     	}
         
@@ -706,7 +726,8 @@ void searchKeyWord(char keyword[]) {
         first = next;
 		z++;
     }
-    
+
+    //printf("w is now %d\n",w);
 	if (w > 0) printf("\nFound it ! We are listing the items...\n\n");
 
     for (k = 0; k < w; k++) {
@@ -719,7 +740,7 @@ void searchFromReNum(int recordNumber){
     FILE *file = fopen("Stock.txt","r+");
     char keyword[50];
     char string[100];
-    snprintf(keyword,50,"Record Number \t\t\t%d",recordNumber);
+    snprintf(keyword,50,"Record Number: %d",recordNumber);
     while(fgets(string,99,file) != NULL){
         if (strstr(string,keyword)) goto Result;
     }
@@ -728,8 +749,6 @@ void searchFromReNum(int recordNumber){
     return;
 	
     Result:
-	
-	system("cls");
 	
     printf("%s", string);
 
@@ -756,26 +775,8 @@ void searchFromReNum(int recordNumber){
 
     fgets(string, 100, file);
     printf("%s\n", string);
-    
-	printf("_____________________________________________________________________________________\n\n");
-	char input;
-	firstInput:
-		printf("do you want to modify this data?\nPlease Enter (Y/N)\n");
-		scanf("%c",&input);
-		fflush(stdin);
-		switch (input){
-		        case 'y':
-		        case 'Y':
-		            modify();
-		        case 'n':
-		        case 'N':
-		            goto noInput;
-		        default:
-		            printf("INVALID INPUT.... RETYPE...\n");
-		            goto firstInput;
-	}
-	noInput:
-		printf("\n");
+
+    fclose(file);
 
 }
 
@@ -784,24 +785,34 @@ void searchName(char type[], char keyword[]) {
     int record[99][2];
     int keywordLine[100];
     char name[99];
-    snprintf(name,99,"%s \t\t\t%s\n",type,keyword);
+    sprintf(name,"%s: %s\n",type,keyword);
     FILE *file = fopen("Stock.txt", "r+");
     int line = 0, rdnum = 0, i = 0, r = 0;
     while (fgets(search, 88, file) != NULL) {
         if (strstr(search,"Record Number")) {
-            sscanf(search, "Record Number \t\t\t%d", &rdnum);
+            sscanf(search, "Record Number: %d", &rdnum);
             record[i][0] = line;
             record[i][1] = rdnum;
             i++;
         }
 
-        if (strcmp(name, search) == 0) {
+        if (strcmp(search, name) == 0) {
+            //printf("%s vs %s",search,name);
             keywordLine[r] = line;
             r++;
         }
 
         line++;
     }
+
+    if (i > 0) {
+        i+=1;
+        record[i][0] = line;
+        record[i][1] = rdnum;
+    }
+
+    //printf("r is now %d\n",r);
+
     if (r == 0){
         printf("Nothing found\n");
         return;
@@ -818,7 +829,7 @@ void searchName(char type[], char keyword[]) {
         }
 
         int next = record[j][0];
-
+        if (next == 0 ) next += first + 2;
         int key = 0;
         while (key < r){
             if (keywordLine[key] >= first && keywordLine[key] < next) {
@@ -826,6 +837,7 @@ void searchName(char type[], char keyword[]) {
                 w++;
                 break;
             }
+
             key++;
         }
 
@@ -834,7 +846,7 @@ void searchName(char type[], char keyword[]) {
         first = next;
         z++;
     }
-
+    //printf("w is now %d\n",w);
     if (w > 0) printf("\nFound it ! We are listing the items...\n\n");
 
     for (k = 0; k < w; k++) {
@@ -849,7 +861,7 @@ struct data structFromRecord(int recordNumber){
     FILE *file = fopen("Stock.txt","r+");
     char keyword[50];
     char string[100];
-    snprintf(keyword,50,"Record Number \t\t\t%d",recordNumber);
+    snprintf(keyword,50,"Record Number: %d",recordNumber);
     while(fgets(string,99,file) != NULL){
         if (strstr(string,keyword)) goto Result;
     }
@@ -859,31 +871,31 @@ struct data structFromRecord(int recordNumber){
 
     Result:
     	
-	sscanf(string,"Record Number \t\t\t%d",&data.Record);
+	sscanf(string,"Record Number: %d",&data.Record);
 
     fgets(string, 100, file);
-    sscanf(string,"Item Name \t\t\t%s",data.ItemName);
+    sscanf(string,"Item Name: %s",data.ItemName);
     
     fgets(string, 100, file);
-    sscanf(string,"Item Number \t\t\t%d",&data.ItemNumber);
+    sscanf(string,"Item Number: %d",&data.ItemNumber);
 
     fgets(string, 100, file);
-    sscanf(string,"Category \t\t\t%s",data.Category);
+    sscanf(string,"Category: %s",data.Category);
 
     fgets(string, 100, file);
-    sscanf(string,"Quantity \t\t\t%d",&data.Quantity);
+    sscanf(string,"Quantity: %d",&data.Quantity);
 
     fgets(string, 100, file);
-    sscanf(string,"Weight \t\t\t\t%lf kg",&data.Weight);
+    sscanf(string,"Weight: %lf kg",&data.Weight);
 
     fgets(string, 100, file);
-    sscanf(string,"Recipient \t\t\t%s",data.Recipient);
+    sscanf(string,"Recipient: %s",data.Recipient);
 
     fgets(string, 100, file);
-    sscanf(string,"Final Destination \t\t%s",data.FinalDestination);
+    sscanf(string,"Final Destination: %s",data.FinalDestination);
 
     fgets(string, 100, file);
-    sscanf(string,"Status \t\t\t\t%s",data.Status);
+    sscanf(string,"Status: %s",data.Status);
     
     return data;
 
