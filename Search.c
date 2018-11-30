@@ -12,7 +12,7 @@ void searchItem(){
 	int search_Record_Num;
 	//search MAIN
 	firstInput:
-	printf("Do you remember what is your Record number?\nYes or No?\nPlease enter (Y/N)\n");
+	printf("Do you remember what is your Record number?\nYes or No?\nPlease enterData (Y/N)\n");
 	scanf("%c",&input);
 	
  switch (input){
@@ -29,7 +29,7 @@ void searchItem(){
     
 	//first type search
 	yesInput:
-		printf("Please enter your Record number : ");
+		printf("Please enterData your Record number : ");
 		scanf("%d",&search_Record_Num);
 		goto searchRN;
 	

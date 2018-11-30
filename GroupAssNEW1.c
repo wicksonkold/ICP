@@ -205,7 +205,7 @@ void searchItem(){
     int search_Record_Num;
     //search MAIN
     firstInput:
-    printf("Do you remember what is your Record number? Please enter (Y/N) ");
+    printf("Do you remember what is your Record number? Please enterData (Y/N) ");
     scanf(" %c",&input);
     fflush(stdin);
 
@@ -223,7 +223,7 @@ void searchItem(){
 
     //first type search, search by Record number
     yesInput:
-    printf("Please enter your Record number : ");
+    printf("Please enterData your Record number : ");
     scanf("%d",&search_Record_Num);
     fflush(stdin);
     goto searchRN;
@@ -382,7 +382,7 @@ void modify(){
 			goto yesInput;
 
 	yesInput:
-    	printf("Please enter your Record number : ");
+    	printf("Please enterData your Record number : ");
     		scanf("%d",&search_Record_Num);
     			fflush(stdin);
 						searchFromReNum(search_Record_Num);
