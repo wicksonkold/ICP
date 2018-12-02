@@ -22,6 +22,8 @@ int main()
     fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
     MainGUI:
+    system("cls");
+    
     printf("1. Add New Item<s> :\n");
     printf("2. Display Item Record<s> :\n");
     printf("3. Search Item Information :\n");
@@ -147,7 +149,7 @@ void addNewItem(){
             goto error;
     }
 
-	system("cls");
+
 }
 
 struct data enterData(){
@@ -197,7 +199,7 @@ void displayItem(){
     printf("\nPress ENTER to go back....");
     getchar();
     fflush(stdin);
-    //system("cls");
+    
 }
 
 // search item
@@ -562,6 +564,63 @@ void modifyRecord(int recordNum){
     fflush(file);
     fclose(file);
 }
+/* 
+// DELETE
+void dataDelete(struct data dat){
+		del:
+		showRecord();
+		printf("______________________________________________________");
+		printf("Please enter the record number you want to delete\n");
+		
+		FILE *file , *tem;
+		
+		char recN;
+		
+		long int recsize;
+		/// sizeo of each record i.e. size of structure variable e
+    	recsize = sizeof(dat);
+    	
+		file = fopen("Stock.txt","r+");
+        printf("\nEnter Record Number to delete: ");
+        scanf("%s", &recN);
+        tem = fopen("Temp.txt","w+");  /// create a intermediate file for temporary storage
+        rewind(file); /// move record to starting of file
+        
+        int a = dat.Record;
+		char str = itoa(a);
+				
+		while(fread(&dat,recsize,1,file) == 1){  /// read all records from file
+        	if(strcmp(str,recN) != 0){  /// if the entered record match
+        		fwrite(&dat,recsize,1,tem); /// move all records except the one that is to be deleted to temp file
+        	}
+        }
+        fclose(file);
+        fclose(tem);
+        
+		char input;
+        remove("Stock.txt"); /// remove the orginal file
+        rename("Temp.txt","Stock.txt"); /// rename the temp file to original file name
+        
+		file = fopen("Stock.txt","r+");
+        
+		printf("Delete another record(y/n)");
+        scanf("%c",&input);
+        fflush(stdin);
+		switch(input){
+			case 'y':
+			case 'Y':
+				goto del;
+			case 'n':
+			case 'N':
+				break;
+		}
+        
+        
+            
+          
+} 
+*/ 
+
 //Functional Sections
 
 void replace(char from[]){
