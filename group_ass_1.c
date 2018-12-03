@@ -523,7 +523,7 @@ void dataDelete() {
        printf("Error: unable to delete the file\n");
     }
      //rename("Stock.txt","trash.txt"); // rename the temp file to original file name
-    rename("Temp.txt","NStock.txt");
+    rename("Temp.txt","Stock.txt");
 	
 	
    
