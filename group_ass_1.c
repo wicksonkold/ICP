@@ -405,12 +405,9 @@ void searchItem(){
 
 void modify(){
     void showRecords();
-    void modifyRecord(int);
-    void replace();
+    void writeLog(char *);
 
     char input;
-    int input2;
-    int search_Record_Num;
 
 
     firstInput:
@@ -495,14 +492,8 @@ void modify(){
 
 	struct data data1;
     enter:
-    printf("1) RecordNumber\nEnter : ");
-    scanf("%d", &data1.Record);
-    fflush(stdin);
 
-    if (checkRecord(data1.Record)) {
-        printf("Duplicated record number, please retype.\n");
-        goto enter;
-    }
+    data1.Record = recN;
 
     printf("2) ItemName\nEnter : ");
     gets(data1.ItemName);
@@ -548,15 +539,14 @@ void modify(){
     fprintf(file,"Recipient: %s\n",data1.Recipient);
     fprintf(file,"Final Destination: %s\n",data1.FinalDestination);
     fprintf(file,"Status: %s\n\n",data1.Status);
-    printf("\nItem modify already.");
+    printf("\nItem successfully modified");
 
     fclose(file);
-   
    
     char zinput;
 
     again:
-    printf("Modify another record(y/n)");
+    printf("\nModify another record(y/n)");
     scanf(" %c", &zinput);
     fflush(stdin);
     switch (zinput) {
