@@ -1,0 +1,203 @@
+//EXTRA FUNCTION 1
+
+void sort(){
+	void showRecords(void);
+	struct data structFromRecord(int);
+	
+	int recN, x;
+    char recSearch[100];
+    char str1[99];
+    char input;
+	
+	//File Replace, Rearange, Rename, Copy Data to new .txt (wickson)
+	
+	//show the record number and ask for sort by record number
+	FILE *file, *temp, *sort;
+	
+	
+	
+		file = fopen("Stock.txt","r+");
+		temp = fopen("Temp.txt","r+");
+		sort = fopen("Sort.txt","r+");
+
+	  		
+
+	showRecords();
+		
+		printf("______________________________________________________\n");	
+    	printf("Do you want to sort the data by record number?\n y / n \n");
+	   	scanf("%c", &input);
+    	
+	//sort it...
+		strcpy(recSearch,"Record Number");
+		while (fgets(str1,99,file) != NULL){
+       		 
+				if (strstr(str1,recSearch)){
+           	 printf("%s",str1);
+           	 x++;
+      	  	}
+   		 }
+   		 
+    	if (x == 0) {
+    	    printf("Nothing found");
+    	    return;
+   		}
+   		
+   
+
+    	temp = fopen("Temp.txt","w");  /// create a intermediate file for temporary storage
+    	rewind(file); /// move record to starting of file
+        
+
+    char ch[100];
+    char ch2[100];
+    char string[100];
+    
+	    fseek(file, 0, SEEK_SET);
+	    sprintf(ch, "Record Number: %d\n", recN);
+	    while (fgets(string, 100, file) != NULL) {
+	
+	        if (strcmp(string, ch) == 0) {
+	            fgets(string, 100, file);
+	            fgets(string, 100, file);
+	            fgets(string, 100, file);
+	            fgets(string, 100, file);
+	            fgets(string, 100, file);
+	            fgets(string, 100, file);
+	            fgets(string, 100, file);
+	            fgets(string, 100, file);
+	            fgets(string, 100, file);
+	            fseek(file, 0, SEEK_CUR);
+	            continue;
+	        }
+
+        fprintf(temp, "%s", string);
+
+    }
+    
+	//do you want to replce the data by sorted data ? replace it 
+	replaceagain:
+		
+		printf("Do you want to reokace the data by this sorted data?\n(y/n)");
+	    scanf(" %c", &input);
+	        fflush(stdin);
+			switch(input){
+				case 'y':
+				case 'Y':
+					goto replacefile;
+				case 'n':
+				case 'N':
+					break;
+	            default:
+	                printf("not an input, returned.");
+	                goto replaceagain;
+			}	
+	//do you want to export as a finished list? // clear the org file , replace a blank doc
+	exportagain:
+		
+		printf("Do you want to export as a finished list? ?\nif yes the system will never catch the file again\n(y/n)");
+	    scanf(" %c", &input);
+	        fflush(stdin);
+			switch(input){
+				case 'y':
+				case 'Y':
+					goto exportfile;
+				case 'n':
+				case 'N':
+					break;
+	            default:
+	                printf("not an input, returned.");
+	                goto exportagain;
+			}
+	//do you want to rename it ? 
+	renameagain:
+		
+		printf("Do you want to rename the sorted data ?(y/n)");
+	    scanf(" %c", &input);
+	        fflush(stdin);
+			switch(input){
+				case 'y':
+				case 'Y':
+					goto retypename;
+				case 'n':
+				case 'N':
+					break;
+	            default:
+	                printf("not an input, returned.");
+	                goto renameagain;
+			}
+		
+    //copy data to new txt, export for user named
+   
+   retypename:
+   	
+	   	fclose(sort);
+		fclose(temp);
+		fclose(file);
+		
+   		char retypename[20];
+   		
+		printf("Enter the NEW NAME for the output file (REMEMBER .txt at the end): ");
+		gets(retypename);
+		
+		int ret1 = rename("Temp.txt",retypename);
+			
+	    if(ret1 == 0) {
+	       printf("Rename file successfully... New name : %c\nOrg file is empty",retypename);
+	    } else {
+	       printf("Error: unable to rename the file\n");
+	    }
+	    
+		goto end;
+		
+	exportfile:
+   	
+	   	fclose(sort);
+		fclose(temp);
+		fclose(file);
+				
+		int ret2 = rename("Temp.txt","ExportedStock.txt");
+			
+	    if(ret2 == 0) {
+	       printf("Export file successfully... ");
+	    } else {
+	       printf("Error: unable to Export the file\n");
+	    }
+	    
+	    int clf = remove("Stock.txt");
+			
+	    if(ret2 == 0) {
+	       printf("Clear ORG file successfully... ");
+	    } else {
+	       printf("Error: unable to clear the file\n");
+	    }
+	    
+		goto end;
+		
+	replacefile:
+		
+		fclose(sort);
+		fclose(temp);
+		fclose(file);
+		
+		int ret3 = rename("Temp.txt","Stock.txt");
+			
+	    if(ret3 == 0) {
+	       printf("Replace file successfully...");
+	    } else {
+	       printf("Error: unable to Replace the file\n");
+	    }
+	    
+		goto end;
+	
+	
+	end:
+		printf("\nPress ENTER to go back....");
+    	getchar();
+   		fflush(stdin);
+	
+	
+	
+	
+	
+}
