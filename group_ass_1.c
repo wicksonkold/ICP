@@ -34,56 +34,58 @@ int main()
     fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
     MainGUI:
-    //system("cls");
-	printf("***    Welcome to HKUSPACE Invebtory masnagement and record System    ***");
+    system("cls");
+    printf("***    Welcome to HKUSPACE Invebtory masnagement and record System    ***");
 	printf("\n                            ***   1819S1   ***");
 	printf("\n*** This system is developed by CCIT4020 Class No. CL-06 Group No.00 ***\n");	
-	printf("--<Basic Function>--\n\n");
-    printf("1. Add New Item<s> :\n\n");
-    printf("2. Display Item Record<s> :\n\n");
-    printf("3. Search Item Information :\n\n");
-    printf("4. Modify Item Record<s> :\n\n");
-    printf("5. Delete Item Record<s> :\n\n");
-    printf("0. Quit The Program : \n\n");
+	printf("			   --<Basic Function>--\n\n");
+
+    printf("1. Add New Item<s> :\n");
+    printf("2. Display Item Record<s> :\n");
+    printf("3. Search Item Information :\n");
+    printf("4. Modify Item Record<s> :\n");
+    printf("5. Delete Item Record<s> :\n");
+    printf("0. Quit The Program : \n");
     printf("\nWhat Is Your Option <0-5> ?\n");
 
     type:
     scanf("%d", &userinput);
     fflush(stdin);
+    system("cls");
 
     switch (userinput) {
 
         case 1:
             printf("you have selected 1. \n[Add New Item<s>]\n\n");
             addNewItem();
-            system("cls");
             goto MainGUI;
 
         case 2:
             printf("you have selected 2. \n[Display Item Record<s>] \n\n");
             displayItem();
-            system("cls");
             goto MainGUI;
         case 3:
             printf("you have selected 3. \n[Search Item Information] \n\n");
             searchItem();
-            system("cls");
             goto MainGUI;
 
         case 4:
             printf("you have selected 4. \n[Modify Item Record<s>] \n\n");
             modify();
-            system("cls");
             goto MainGUI;
 
         case 5:
             printf("you have selected 5. \n[Delete Item Record<s>] \n\n");
             dataDelete();
-            system("cls");
             goto MainGUI;
+
         case 0:
             printf("you have selected 0. \n[Quit The Program]\n");
             break;
+        case 10:
+            printf("test\n");
+            test();
+            goto MainGUI;
         default:
             printf("you have selected a invalid number <%d> PLEASE RETYPE \n", userinput);
             goto type;
@@ -108,6 +110,24 @@ int main()
  */
 
 //Sub Sections
+
+void test(){
+    struct data structFromRecord(int);
+    int recordnum;
+    printf("type a record num\n");
+    scanf("%d", &recordnum);
+    struct data Data = structFromRecord(recordnum);
+    printf("%d\n", Data.Record);
+    printf("%s\n", Data.ItemName);
+    printf("%d\n", Data.ItemNumber);
+    printf("%s\n", Data.Category);
+    printf("%d\n", Data.Quantity);
+    printf("%.1f\n", Data.Weight);
+    printf("%s\n", Data.Recipient);
+    printf("%s\n", Data.FinalDestination);
+    printf("%s\n", Data.Status);
+
+}
 
 int checkRecord(int record) {
     FILE *file = fopen("Stock.txt", "r+");
@@ -389,9 +409,12 @@ void searchItem(){
 
 void modify(){
     void showRecords();
-    void writeLog(char *);
+    void modifyRecord(int);
+    void replace();
 
     char input;
+    int input2;
+    int search_Record_Num;
 
 
     firstInput:
@@ -476,8 +499,14 @@ void modify(){
 
 	struct data data1;
     enter:
+    printf("1) RecordNumber\nEnter : ");
+    scanf("%d", &data1.Record);
+    fflush(stdin);
 
-    data1.Record = recN;
+    if (checkRecord(data1.Record)) {
+        printf("Duplicated record number, please retype.\n");
+        goto enter;
+    }
 
     printf("2) ItemName\nEnter : ");
     gets(data1.ItemName);
@@ -523,14 +552,15 @@ void modify(){
     fprintf(file,"Recipient: %s\n",data1.Recipient);
     fprintf(file,"Final Destination: %s\n",data1.FinalDestination);
     fprintf(file,"Status: %s\n\n",data1.Status);
-    printf("\nItem successfully modified");
+    printf("\nItem modify already.");
 
     fclose(file);
+   
    
     char zinput;
 
     again:
-    printf("\nModify another record(y/n)");
+    printf("Modify another record(y/n)");
     scanf(" %c", &zinput);
     fflush(stdin);
     switch (zinput) {
