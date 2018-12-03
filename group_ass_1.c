@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <unistd.h>
 
 
 int haveData;
-
+int logData;
 //Main Sections
 
 
@@ -31,6 +33,8 @@ int main()
     void modify(void);
     void test(void);
     void dataDelete(void);
+    //void saveLog(void);
+
     fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
     MainGUI:
@@ -433,6 +437,7 @@ void modify(){
 void dataDelete() {
     void showRecords(void);
     struct data structFromRecord(int);
+    void writeLog(char *);
 
     int recN, x = 0;
     char recSearch[100];
@@ -472,7 +477,7 @@ void dataDelete() {
 
     char ch[100];
     char string[100];
-    
+
     fseek(file, 0, SEEK_SET);
     sprintf(ch, "Record Number: %d\n", recN);
     while (fgets(string, 100, file) != NULL) {
@@ -503,9 +508,12 @@ void dataDelete() {
 	
 
     if(ret == 0) {
-       printf("File deleted successfully\n");
+        printf("Record deleted successfully\n");
+        char log[100];
+        sprintf(log, "Deleted a Record with Record Number: %d.", recN);
+        writeLog(log);
     } else {
-       printf("Error: unable to delete the file\n");
+        printf("Error: unable to delete the Record\n");
     }
      //rename("Stock.txt","trash.txt"); // rename the temp file to original file name
     rename("Temp.txt","Stock.txt");
@@ -544,15 +552,92 @@ void replace(char from[]){
     }
 }
 
-void fileIsEmpty(){
-    FILE *file = fopen("Stock.txt", "r+");
-    char string[30];
-    if (file == NULL) return;
-    fgets(string,30,file);
-    if (strstr(string,"Record Number")) {
-        haveData = 1;
+char *getTime() {
+    char time[100];
+    return _strtime(time);
+}
+
+char *getDate() {
+    char date[100];
+    _strdate(date);
+    for (int i = 0; i < strlen(date); ++i) {
+        if (date[i] == '/') date[i] = '-';
     }
-    fclose(file);
+    return strcpy(date, date);
+}
+
+void writeLog(char *content) { /// Logging function by eric lam
+
+
+
+    char date[100];
+    strcpy(date, getDate());
+
+    char save[100];
+    sprintf(save, "./log/%s.log", date);
+
+    FILE *log = fopen(save, (logData ? "a+" : "w+"));
+
+    if (log == NULL) {
+        printf("log is null");
+        freopen(save, "w+", log);
+    }
+
+    char time[100] = "[";
+    strcat(time, strcat(getTime(), "] "));
+
+    fprintf(log, "%s\n", strcat(time, content));
+    logData = 1;
+    fflush(log);
+    fclose(log);
+}
+
+/*void saveLog(){
+    char date[100];
+    strcpy(date,getDate());
+    for (int i = 0; i < strlen(date); ++i) {
+        if (date[i] == '/') date[i] = '-';
+    }
+    char save[100];
+    int dup = 1;
+    sprintf(save,"%s-%d.log",date,dup);
+    while (access( save , F_OK) == 0){
+        ++dup;
+        sprintf(save,"%s-%d.log",date,dup);
+    }
+    rename("latest.log",save);
+
+}*/
+
+void fileIsEmpty(){
+
+    if (access("log", F_OK) != 0) mkdir("log");
+
+    char date[100];
+    strcpy(date, getDate());
+
+    char save[100];
+    sprintf(save, "./log/%s.log", date);
+
+    FILE *file = fopen("Stock.txt", "r");
+    FILE *log = fopen(save, "r");
+    char string[30];
+    if (file != NULL) {
+        fgets(string, 30, file);
+        if (strstr(string, "Record Number")) {
+            haveData = 1;
+        }
+        fclose(file);
+    }
+    if (log != NULL) {
+        fgets(string, 30, log);
+        if (strstr(string, "[")) {
+            logData = 1;
+        }
+        fclose(log);
+    }
+
+
 }
 /*
 void closef(){
@@ -600,6 +685,9 @@ void writeIn(struct data structdata){
     fprintf(fp,"Status: %s\n\n",structdata.Status);
     printf("\nItem added.");
     haveData = 1;
+    char log[100];
+    sprintf(log, "Added a Record with Record Number: %d.", structdata.Record);
+    writeLog(log);
     fclose(fp);
 }
 
