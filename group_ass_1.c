@@ -596,13 +596,7 @@ void dataDelete() {
     del:
     printf("Please enter the record number you want to delete\n");
 
-
-
-
-    /// size of each record i.e. size of structure variable
-
-
-
+	showRecords();
 
     strcpy(recSearch, "Record Number");
     while (fgets(str1, 99, file) != NULL) {
