@@ -34,6 +34,7 @@ int main() {
     void test(void);
     void dataDelete(void);
     //void saveLog(void);
+    void exportfile(void);
 
     fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
@@ -46,6 +47,7 @@ int main() {
     printf("4. Modify Item Record<s> :\n");
     printf("5. Delete Item Record<s> :\n");
     printf("6. Disable / Enable Logging:\n");
+    printf("7. Export / BackUp File: \n");
     printf("0. Quit The Program : \n");
     printf("\nWhat Is Your Option <0-8> ?\n");
 
@@ -88,6 +90,10 @@ int main() {
             logEnabled = !logEnabled;
             printf("Logging %s\n", (logEnabled ? "Enabled" : "Disabled"));
             goto MainGUI;
+        case 7:
+        	exportfile();
+        	printf("you have selected 6. \n[Export File & BackUp File]");
+        	goto MainGUI;
         case 0:
             printf("you have selected 0. \n[Quit The Program]\n");
             break;
@@ -660,6 +666,229 @@ void dataDelete() {
             goto again;
     }
 }
+
+//Hui Shiu Lun Wickson Extra Function 
+void exportfile(){
+	void showRecords(void);
+	struct data structFromRecord(int);
+	
+	int recN, x;
+    char recSearch[100];
+    char str1[99];
+    char input;
+	char c;
+	//File Replace, Rearange, Rename, Copy Data to new .txt (wickson)
+	
+	//show the record number and ask for sort by record number
+	FILE *file, *temp, *expo, *back;
+	
+		file = fopen("Stock.txt","r+");
+		temp = fopen("Temp.txt","r+");
+		expo = fopen("Export.txt","r+");
+		back = fopen("StockBackUp.txt","r+");
+		
+	showRecords();
+		
+	firstinput:
+		printf("______________________________________________________\n");	
+    	printf("Do you want to output the data?\n ( y / n )\n");
+	   	scanf("%c", &input);
+	   	switch(input){
+				case 'y':
+				case 'Y':
+					goto replaceagain;
+				case 'n':
+				case 'N':
+					printf("QUIT Export FUNCTUION...");
+					goto end;
+				
+	            default:
+	                printf("not an input, returned.");
+	                goto firstinput;
+			}	
+			
+	
+	replaceagain:
+		
+		printf("\nDo you want to duplicate the file for back up? (StockBackUp.txt)\nif the StockBackUp.txt is exist file will be rewrite.\n( y / n (skip) / Q(exit))\n");
+	    scanf(" %c", &input);
+	        fflush(stdin);
+			switch(input){
+				case 'y':
+				case 'Y':
+						goto replacefile;			
+				case 'n':
+				case 'N':
+					goto exportagain;
+				case 'q':
+				case 'Q':
+					printf("QUIT EXPORT FUNCTUION...\n");
+					goto end;
+	            default:
+	                printf("not an input, returned.\n");
+	                goto replaceagain;
+			}	
+			
+	replacefile:
+			   
+		    strcpy(recSearch, "Record Number");
+		    while (fgets(str1, 99, file) != NULL) {
+		        if (strstr(str1, recSearch)) {
+		            printf("%s",str1);
+		            x++;
+		        }
+		    }
+		    if (x == 0) {
+		        printf("Nothing found");
+		        return;
+		    }
+		    recN = 00000;
+		
+		    char ch[100];
+		    char string[100];
+		
+		    fseek(file, 0, SEEK_SET);
+
+		    while (fgets(string, 100, file) != NULL) {
+		
+		        if (strcmp(string, ch) == 0) {
+		            fgets(string, 100, file);
+		            fgets(string, 100, file);
+		            fgets(string, 100, file);
+		            fgets(string, 100, file);
+		            fgets(string, 100, file);
+		            fgets(string, 100, file);
+		            fgets(string, 100, file);
+		            fgets(string, 100, file);
+		            fgets(string, 100, file);
+		            fseek(file, 0, SEEK_CUR);
+		            continue;
+		        }
+		
+		        fprintf(temp, "%s", string);
+		
+		    }
+		fclose(expo);
+		fclose(temp);
+		fclose(file);
+	    fclose(back);
+	    
+		int ret3 = rename("Temp.txt","StockBackUp.txt");
+			
+	    if(ret3 == 0) {
+	       printf("Duplicate file successfully...\n");
+	    } else {
+	       printf("Error: unable to duplicate the file\n");
+	    }
+		
+		file = fopen("Stock.txt","r+");
+		temp = fopen("Temp.txt","r+");
+		expo = fopen("Export.txt","r+");
+	    back = fopen("StockBackUp.txt","r+");
+		
+	//do you want to export as a finished list? // clear the org file , replace a blank doc
+	exportagain:
+		
+		printf("\nDo you want to export as a finished list (Export.txt) ?\nThis will clear the org Stock file.\n( y / n (export as userinput name)/ Q(exit))\n");
+	    scanf("%c", &input);
+	        fflush(stdin);
+			switch(input){
+				case 'y':
+				case 'Y':
+					goto exportfile;
+				case 'n':
+				case 'N':
+					goto renameagain;
+				case 'q':
+				case 'Q':
+					printf("QUIT EXPORT FUNCTUION...\n");
+					goto end;
+	            default:
+	                printf("not an input, returned.\n");
+	                goto exportagain;
+			}
+			
+	exportfile:
+   	
+	   	fclose(expo);
+		fclose(temp);
+		fclose(file);
+		fclose(back);
+			
+			remove("Export.txt");
+		int ret2 = rename("Stock.txt","Export.txt");
+			
+	    if(ret2 == 0) {
+	       printf("Export file successfully... \n");
+	    } else {
+	       printf("Error: unable to Export the file\n");
+	    }
+	    
+	    file = fopen("Stock.txt","r+");
+	    fclose(file);
+	    
+	    printf("Export file finish....\n");
+		goto end;
+	//do you want to rename it ? 
+	renameagain:
+		
+		printf("\nDo you want to rename the sorted data ?\n( y / n (back to previous step) / Q(exit) )\n");
+	    scanf(" %c", &input);
+	        fflush(stdin);
+			switch(input){
+				case 'y':
+				case 'Y':
+					goto retypename;
+				case 'n':
+				case 'N':
+					goto exportfile;
+				case 'q':
+				case 'Q':
+					printf("QUIT EXPORT FUNCTUION...\n");
+					goto end;
+	            default:
+	                printf("not an input, returned.\n");
+	                goto renameagain;
+			}
+		
+    //copy data to new txt, export for user named
+   
+   retypename:
+   	
+	   	fclose(expo);
+		fclose(temp);
+		fclose(file);
+		fclose(back);
+		
+   		char retypename[20];
+   		
+		printf("\nEnter the NEW NAME for the output file\n(REMEMBER .txt at the end) : ");
+		gets(retypename);
+		
+		int ret1 = rename("Stock.txt",retypename);
+			
+	    if(ret1 == 0) {
+	       printf("\nRename file successfully... New name : %s\nOrg file is empty\n",retypename);
+	    } else {
+	       printf("Error: unable to rename the file\n");
+	    }
+	    
+	    printf("Userinput Name finish....\n");
+		goto end;
+		
+	
+	end:
+
+		printf("\nPress ENTER to go back....\n");
+    	getchar();
+   		fflush(stdin);
+	
+	
+	
+	
+	
+}
+
 
 
 //Functional Sections
