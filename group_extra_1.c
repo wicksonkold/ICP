@@ -131,6 +131,18 @@ void test() {
 
 }
 
+int checkRecord(int record) {
+    FILE *file = fopen("Stock.txt", "r+");
+    char keyword[50];
+    char string[100];
+    snprintf(keyword, 50, "Record Number: %d\n", record);
+    while (fgets(string, 99, file) != NULL) {
+        if (strcmp(string, keyword) == 0) return 1;
+    }
+    fclose(file);
+    return 0;
+}
+
 void addNewItem() {
     void writeIn(struct data);
     struct data enterData();
@@ -138,7 +150,6 @@ void addNewItem() {
     fflush(stdin);
     struct data Data;
     Data = enterData();
-    //printf(" you have typed %d %s %d %s %d %.2f %s %s %s",Data.Record, Data.ItemName, Data.ItemNumber, Data.Category, Data.Quantity, Data.Weight, Data.Recipient, Data.FinalDestination, Data.Status);
     writeIn(Data);
     char typeAgain;
     error:
@@ -162,9 +173,15 @@ void addNewItem() {
 
 struct data enterData() {
     struct data data1;
+    enter:
     printf("1) RecordNumber\nEnter : ");
     scanf("%d", &data1.Record);
     fflush(stdin);
+
+    if (checkRecord(data1.Record)) {
+        printf("Duplicated record number, please retype.\n");
+        goto enter;
+    }
 
     printf("2) ItemName\nEnter : ");
     gets(data1.ItemName);
