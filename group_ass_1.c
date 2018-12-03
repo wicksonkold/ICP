@@ -1,13 +1,24 @@
 #include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include <string.h>
 
 
 int haveData;
 
 //Main Sections
+
+
+struct data {
+    int Record;
+    char ItemName[50];
+    int ItemNumber;
+    char Category[10];
+    int Quantity;
+    double Weight;
+    char Recipient[50];
+    char FinalDestination[20];
+    char Status[20];
+} Data;
 
 int main()
 {
@@ -19,6 +30,7 @@ int main()
     void searchItem(void);
     void modify(void);
     void test(void);
+    void dataDelete(void);
     fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
     MainGUI:
@@ -60,6 +72,7 @@ int main()
 
         case 5:
             printf("you have selected 5. \n[Delete Item Record<s>] \n\n");
+            dataDelete();
             goto MainGUI;
 
         case 0:
@@ -80,17 +93,6 @@ int main()
     return 0;
 }
 
-struct data{
-    int Record;
-    char ItemName[50];
-    int ItemNumber;
-    char Category[10];
-    int Quantity;
-    double Weight;
-    char Recipient[50];
-    char FinalDestination[20];
-    char Status[20];
-}Data;
 
 /*
  * Examples
@@ -427,184 +429,76 @@ void modify(){
 
 }
 
-void modifyRecord(int recordNum){
-    FILE *file = fopen("Stock.txt","rt+");
-    char string[99];
-    int record;
-    while (fgets(string,99,file) != NULL){
-        sscanf(string,"Record Number: %d\n",&record);
-        if (record == recordNum){
-            goto result;
-        }
-    }
-
-    printf("Nothing Found\n\n");
-    fclose(file);
-    return;
-
-    result:
-
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s", string);
-
-    fgets(string, 100, file);
-    printf("%s\n", string);
-
-    char edit[100];
-    int input2;
-    printf("\n\nwhich you want to edit ?\n");
-    printf("2) ItemName\n");
-    printf("3) ItemNumber  \n");
-    printf("4) Category \n");
-    printf("5) Quantity\n");
-    printf("6) Weight\n");
-    printf("7) Recipient\n");
-    printf("8) Final Destination\n");
-    printf("9) Delivery Status\n");
-    scanf("%d",&input2);
-    fflush(stdin);
-
-
-    switch(input2){
-        case 2:
-            printf("You have selected Item Name\n\n");
-            strcpy(edit,"Item Name");
-            break;
-
-        case 3:
-            printf("You have selected Item Number\n\n");
-            strcpy(edit,"Item Number");
-            break;
-
-        case 4:
-            printf("You have selected Category\n\n");
-            strcpy(edit,"Category");
-            break;
-
-        case 5:
-            printf("You have selected Quantity\n\n");
-            strcpy(edit,"Quantity");
-            break;
-
-        case 6:
-            printf("You have selected Weight\n\n");
-            strcpy(edit,"Weight");
-            break;
-
-        case 7:
-            printf("You have selected Recipient\n\n");
-            strcpy(edit,"Recipient");
-            break;
-
-        case 8:
-            printf("You have selected Final Destination\n\n");
-            strcpy(edit,"Final Destination");
-            break;
-
-        case 9:
-            printf("You have selected Delivery Status\n\n");
-            strcpy(edit,"Status");
-            break;
-        default:
-            printf("INVALID INPUT... RETYPE...\n");
-            goto result;
-    }
-    char editTo[50];
-    printf("\nEdit to: ");
-    gets( editTo );
-    fflush(stdin);
-
-    //freopen("Stock.txt","r+",file);
-    fseek(file,0,SEEK_SET);
-    while (fgets(string,99,file) != NULL){
-        sscanf(string,"Record Number: %d\n",&record);
-        if (record == recordNum){
-            long loc = 0;
-            while (strcmp(string,"") != 0){
-                fgets(string,99,file);
-                //printf("string is now %s\n",string);
-                if (strstr(string,edit)) {
-                    //printf("\nfound edit target %s in %s\n",edit,string);
-                    //fwrite(input, strlen(input), sizeof(ftell(file)),file);
-                    char input[99];
-                    sprintf(input,"%s: %s",edit,editTo);
-                    fseek(file,loc,SEEK_SET);
-                    fprintf(file,"\0");
-                    fputs(input,file);
-                    printf("Successfully edited %s to '%s'\n\n", edit, editTo);
-                    break;
-                }
-                loc = ftell(file);
-
-            }
-            break;
-        }
-    }
-
-    fflush(file);
-    fclose(file);
-}
-/* 
 // DELETE
-void dataDelete(struct data dat){
-		del:
-		showRecord();
-		printf("______________________________________________________");
+void dataDelete() {
+    void showRecords(void);
+    struct data structFromRecord(int);
+    del:
+    printf("______________________________________________________\n");
 		printf("Please enter the record number you want to delete\n");
 		
 		FILE *file , *tem;
-		
-		char recN;
+
+    int recN;
 		
 		long int recsize;
 		/// sizeo of each record i.e. size of structure variable e
-    	recsize = sizeof(dat);
+
     	
 		file = fopen("Stock.txt","r+");
         printf("\nEnter Record Number to delete: ");
-        scanf("%s", &recN);
+    scanf("%d", &recN);
+    fflush(stdin);
+
+
+    struct data dat;
+    dat = structFromRecord(recN);
+    recsize = sizeof(dat);
+
         tem = fopen("Temp.txt","w+");  /// create a intermediate file for temporary storage
         rewind(file); /// move record to starting of file
         
         int a = dat.Record;
-		char str = itoa(a);
-				
-		while(fread(&dat,recsize,1,file) == 1){  /// read all records from file
-        	if(strcmp(str,recN) != 0){  /// if the entered record match
-        		fwrite(&dat,recsize,1,tem); /// move all records except the one that is to be deleted to temp file
-        	}
+    char ch[100];
+    char ch2[100];
+    itoa(a, ch, 10);
+    sprintf(ch2, "%d", recN);
+    char string[100];
+    /*while(fread(&dat, sizeof(recsize),1,file) == 1){  /// read all records from file
+        if(strcmp(ch,ch2) != 0){  /// if the entered record match
+            fwrite(&dat, sizeof(recsize),1,tem); /// move all records except the one that is to be deleted to temp file
         }
+    }*/
+    sprintf(ch, "Record Number: %d", recN);
+    while (fgets(string, 100, file) != NULL) {
+
+        if (strstr(string, ch)) {
+            fgets(string, 100, file);
+            fgets(string, 100, file);
+            fgets(string, 100, file);
+            fgets(string, 100, file);
+            fgets(string, 100, file);
+            fgets(string, 100, file);
+            fgets(string, 100, file);
+            fgets(string, 100, file);
+            fgets(string, 100, file);
+            fseek(file, 0, SEEK_CUR);
+            continue;
+        }
+
+        fprintf(tem, "%s", string);
+
+    }
         fclose(file);
         fclose(tem);
-        
+
 		char input;
-        remove("Stock.txt"); /// remove the orginal file
         rename("Temp.txt","Stock.txt"); /// rename the temp file to original file name
-        
-		file = fopen("Stock.txt","r+");
-        
+    remove("Stock.txt"); /// remove the orginal file
+
+
 		printf("Delete another record(y/n)");
-        scanf("%c",&input);
+    scanf(" %c", &input);
         fflush(stdin);
 		switch(input){
 			case 'y':
@@ -613,13 +507,12 @@ void dataDelete(struct data dat){
 			case 'n':
 			case 'N':
 				break;
+            default:
+                printf("not an input, returned.");
+                return;
 		}
-        
-        
-            
-          
-} 
-*/ 
+}
+
 
 //Functional Sections
 
@@ -958,4 +851,142 @@ struct data structFromRecord(int recordNumber){
     
     return data;
 
+}
+
+void modifyRecord(int recordNum) {
+    FILE *file = fopen("Stock.txt", "rt+");
+    char string[99];
+    int record;
+    while (fgets(string, 99, file) != NULL) {
+        sscanf(string, "Record Number: %d\n", &record);
+        if (record == recordNum) {
+            goto result;
+        }
+    }
+
+    printf("Nothing Found\n\n");
+    fclose(file);
+    return;
+
+    result:
+
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s", string);
+
+    fgets(string, 100, file);
+    printf("%s\n", string);
+
+    char edit[100];
+    int input2;
+    printf("\n\nwhich you want to edit ?\n");
+    printf("2) ItemName\n");
+    printf("3) ItemNumber  \n");
+    printf("4) Category \n");
+    printf("5) Quantity\n");
+    printf("6) Weight\n");
+    printf("7) Recipient\n");
+    printf("8) Final Destination\n");
+    printf("9) Delivery Status\n");
+    scanf("%d", &input2);
+    fflush(stdin);
+
+
+    switch (input2) {
+        case 2:
+            printf("You have selected Item Name\n\n");
+            strcpy(edit, "Item Name");
+            break;
+
+        case 3:
+            printf("You have selected Item Number\n\n");
+            strcpy(edit, "Item Number");
+            break;
+
+        case 4:
+            printf("You have selected Category\n\n");
+            strcpy(edit, "Category");
+            break;
+
+        case 5:
+            printf("You have selected Quantity\n\n");
+            strcpy(edit, "Quantity");
+            break;
+
+        case 6:
+            printf("You have selected Weight\n\n");
+            strcpy(edit, "Weight");
+            break;
+
+        case 7:
+            printf("You have selected Recipient\n\n");
+            strcpy(edit, "Recipient");
+            break;
+
+        case 8:
+            printf("You have selected Final Destination\n\n");
+            strcpy(edit, "Final Destination");
+            break;
+
+        case 9:
+            printf("You have selected Delivery Status\n\n");
+            strcpy(edit, "Status");
+            break;
+        default:
+            printf("INVALID INPUT... RETYPE...\n");
+            goto result;
+    }
+    char editTo[50];
+    printf("\nEdit to: ");
+    gets(editTo);
+    fflush(stdin);
+
+    //freopen("Stock.txt","r+",file);
+    fseek(file, 0, SEEK_SET);
+    while (fgets(string, 99, file) != NULL) {
+        sscanf(string, "Record Number: %d\n", &record);
+        if (record == recordNum) {
+            long loc = 0;
+            while (strcmp(string, "") != 0) {
+                fgets(string, 99, file);
+                //printf("string is now %s\n",string);
+                if (strstr(string, edit)) {
+                    //printf("\nfound edit target %s in %s\n",edit,string);
+                    //fwrite(input, strlen(input), sizeof(ftell(file)),file);
+                    char input[99];
+                    sprintf(input, "%s: %s", edit, editTo);
+                    fseek(file, loc, SEEK_SET);
+                    fprintf(file, "\0");
+                    fputs(input, file);
+                    printf("Successfully edited %s to '%s'\n\n", edit, editTo);
+                    break;
+                }
+                loc = ftell(file);
+
+            }
+            break;
+        }
+    }
+
+    fflush(file);
+    fclose(file);
 }
