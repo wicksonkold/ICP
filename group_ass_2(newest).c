@@ -99,10 +99,11 @@ int main() {
             goto MainGUI;
         case 7:
         	exportfile();
-        	printf("you have selected 6. \n[Export File & BackUp File]");
+        	printf("you have selected 7. \n[Export File & BackUp File]");
         	goto MainGUI;
         case 8:
-            printf("you have selected 7. \n[Create remarks]\n");
+        	system("cls");
+            printf("you have selected 8. \n[Create remarks]\n");
 			remarks();
             goto MainGUI;
         case 0:
