@@ -470,21 +470,9 @@ void dataDelete() {
     fflush(stdin);
 
 
-    //struct data dat;
-    //dat = structFromRecord(recN);
-
-    //int a = dat.Record;
     char ch[100];
-    //char ch2[100];
-    //itoa(a, ch, 10);
-    //sprintf(ch2, "%d", recN);
     char string[100];
-   
-    /*while(fread(&dat, sizeof(recsize),1,file) == 1){  /// read all records from file
-        if(strcmp(ch,ch2) != 0){  /// if the entered record match
-            fwrite(&dat, sizeof(recsize),1,tem); /// move all records except the one that is to be deleted to temp file
-        }
-    }*/
+    
     fseek(file, 0, SEEK_SET);
     sprintf(ch, "Record Number: %d\n", recN);
     while (fgets(string, 100, file) != NULL) {
