@@ -35,13 +35,16 @@ int main()
 
     MainGUI:
     //system("cls");
-
-    printf("1. Add New Item<s> :\n");
-    printf("2. Display Item Record<s> :\n");
-    printf("3. Search Item Information :\n");
-    printf("4. Modify Item Record<s> :\n");
-    printf("5. Delete Item Record<s> :\n");
-    printf("0. Quit The Program : \n");
+	printf("***    Welcome to HKUSPACE Invebtory masnagement and record System    ***");
+	printf("\n                            ***   1819S1   ***");
+	printf("\n*** This system is developed by CCIT4020 Class No. CL-06 Group No.00 ***\n");	
+	printf("--<Basic Function>--\n\n");
+    printf("1. Add New Item<s> :\n\n");
+    printf("2. Display Item Record<s> :\n\n");
+    printf("3. Search Item Information :\n\n");
+    printf("4. Modify Item Record<s> :\n\n");
+    printf("5. Delete Item Record<s> :\n\n");
+    printf("0. Quit The Program : \n\n");
     printf("\nWhat Is Your Option <0-5> ?\n");
 
     type:
