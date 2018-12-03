@@ -406,6 +406,7 @@ void searchItem(){
 void modify(){
     void showRecords();
     void modifyRecord(int);
+    void replace();
 
     char input;
     int input2;
@@ -442,8 +443,6 @@ void modify(){
 
     FILE *file = fopen("Stock.txt", "r");
     FILE *tem = fopen("Temp.txt", "w");  /// create a intermediate file for temporary storage
-
-    mod:
 
     strcpy(recSearch, "Record Number");
     while (fgets(str1, 99, file) != NULL) {
@@ -494,10 +493,66 @@ void modify(){
     int ret = remove("Stock.txt");
     rename("Temp.txt", "Stock.txt");
 
+	struct data data1;
+    enter:
+    printf("1) RecordNumber\nEnter : ");
+    scanf("%d", &data1.Record);
+    fflush(stdin);
 
-    ///////////
-    //enterData();
-    ///////////
+    if (checkRecord(data1.Record)) {
+        printf("Duplicated record number, please retype.\n");
+        goto enter;
+    }
+
+    printf("2) ItemName\nEnter : ");
+    gets(data1.ItemName);
+    fflush(stdin);
+
+    printf("3) ItemNumber\nEnter : ");
+    scanf("%d", &data1.ItemNumber);
+    fflush(stdin);
+
+    printf("4) Category\nEnter : ");
+    gets(data1.Category);
+    fflush(stdin);
+
+    printf("5) Quantity\nEnter : ");
+    scanf("%d", &data1.Quantity);
+    fflush(stdin);
+
+    printf("6) Weight\nEnter : ");
+    scanf("%lf", &data1.Weight);
+    fflush(stdin);
+
+    printf("7) Recipient\nEnter : ");
+    gets(data1.Recipient);
+    fflush(stdin);
+
+    printf("8) Final Destination\nEnter : ");
+    gets(data1.FinalDestination);
+    fflush(stdin);
+
+    printf("9) Delivery status \nEnter : ");
+    gets(data1.Status);
+    fflush(stdin);
+    
+	
+    //Start write in  the file
+    file = fopen("Stock.txt","a+");
+    fprintf(file,"Record Number: %d\n",data1.Record);
+    fprintf(file,"Item Name: %s\n",data1.ItemName);
+    fprintf(file,"Item Number: %d\n",data1.ItemNumber);
+    fprintf(file,"Category: %s\n",data1.Category);
+    fprintf(file,"Quantity: %d\n",data1.Quantity);
+    fprintf(file,"Weight: %.1f kg\n",data1.Weight);
+    fprintf(file,"Recipient: %s\n",data1.Recipient);
+    fprintf(file,"Final Destination: %s\n",data1.FinalDestination);
+    fprintf(file,"Status: %s\n\n",data1.Status);
+    printf("\nItem modify already.");
+
+    fclose(file);
+   
+   
     char zinput;
 
     again:
@@ -507,7 +562,7 @@ void modify(){
     switch (zinput) {
         case 'y':
         case 'Y':
-            goto mod;
+            goto noInput;
         case 'n':
         case 'N':
             break;
