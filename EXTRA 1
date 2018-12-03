@@ -24,11 +24,28 @@ void sort(){
 
 	showRecords();
 		
+	firstinput:
 		printf("______________________________________________________\n");	
-    	printf("Do you want to sort the data by record number?\n y / n \n");
+    	printf("Do you want to sort the data by record number?\n ( y / n / Q(exit))\n");
 	   	scanf("%c", &input);
+	   	switch(input){
+				case 'y':
+				case 'Y':
+					goto sort;
+				case 'n':
+				case 'N':
+					replaceagain:
+				case 'q':
+				case 'Q':
+					break;
+	            default:
+	                printf("not an input, returned.");
+	                goto firstinput;
+			}	
+	   	
     	
 	//sort it...
+	sort:
 		strcpy(recSearch,"Record Number");
 		while (fgets(str1,99,file) != NULL){
        		 
@@ -74,11 +91,12 @@ void sort(){
         fprintf(temp, "%s", string);
 
     }
+    //first record first line record number //next nextline record number , compare their number , make a loop check , array 
     
 	//do you want to replce the data by sorted data ? replace it 
 	replaceagain:
 		
-		printf("Do you want to reokace the data by this sorted data?\n(y/n)");
+		printf("Do you want to rplace the data by this sorted data?\n( y / n (skip) / Q(exit))");
 	    scanf(" %c", &input);
 	        fflush(stdin);
 			switch(input){
@@ -87,23 +105,50 @@ void sort(){
 					goto replacefile;
 				case 'n':
 				case 'N':
+					goto exportagain;
+				case 'q':
+				case 'Q':
 					break;
 	            default:
 	                printf("not an input, returned.");
 	                goto replaceagain;
 			}	
+			
+	replacefile:
+		
+		fclose(sort);
+		fclose(temp);
+		fclose(file);
+		
+		remove("Stock.txt");
+		int ret3 = rename("Temp.txt","Stock.txt");
+			
+	    if(ret3 == 0) {
+	       printf("Replace file successfully...\n");
+	    } else {
+	       printf("Error: unable to Replace the file\n");
+	    }
+		
+		file = fopen("Stock.txt","r+");
+		temp = fopen("Temp.txt","r+");
+		sort = fopen("Sort.txt","r+");
+	    
+		
 	//do you want to export as a finished list? // clear the org file , replace a blank doc
 	exportagain:
 		
-		printf("Do you want to export as a finished list? ?\nif yes the system will never catch the file again\n(y/n)");
-	    scanf(" %c", &input);
+		printf("Do you want to export as a finished list (Completed.txt) ?\n( y / n / Q(exit))");
+	    scanf("%c", &input);
 	        fflush(stdin);
 			switch(input){
 				case 'y':
 				case 'Y':
-					goto exportfile;
+					goto renameagain;
 				case 'n':
 				case 'N':
+					
+				case 'q':
+				case 'Q':
 					break;
 	            default:
 	                printf("not an input, returned.");
@@ -174,21 +219,7 @@ void sort(){
 	    
 		goto end;
 		
-	replacefile:
-		
-		fclose(sort);
-		fclose(temp);
-		fclose(file);
-		
-		int ret3 = rename("Temp.txt","Stock.txt");
-			
-	    if(ret3 == 0) {
-	       printf("Replace file successfully...");
-	    } else {
-	       printf("Error: unable to Replace the file\n");
-	    }
-	    
-		goto end;
+
 	
 	
 	end:
