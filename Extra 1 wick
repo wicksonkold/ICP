@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+
+void sort(){
+	
+	struct data structFromRecord(int);
+	
+	void showRecords();
+	
+	int  x;
+    char recSearch[100];
+    char str1[99];
+    FILE *file , temp , sort;
+	// Extra Funcation 1 : Sort by record number, File Replace, Reconstruct, Rename, Copy Data to new .txt (wickson)
+	file = fopen("Stock.txt","r+");
+	temp = fopen("Temp.txt","r+");
+	sort = fopen("Sort.txt","r+");
+	
+	strcpy(recSearch,"Record Number");
+	while (fgets(str1,99,file) != NULL){
+    if (strstr(str1,recSearch)){
+        printf("%s",str1);
+            x++;
+        }
+    }
+    if (x == 0) {
+        printf("Nothing found");
+        return;
+    }
+    char input;
+    reinput:
+		printf("______________________________________________________\n");	
+		printf("Do you want to sort it by Record Numbers ? \n y / n\n");
+		scanf("%c",&input);
+			switch(input){
+				
+				case 'y':
+				case 'Y':
+					goto sort;
+				case 'n':
+				case 'N':
+					return;
+				default:
+					printf("wrong input");
+					goto reinput;
+			}	
+	
+	int i = data.
+	for(i = 0)
+	
+	fclose(file);
+	fclose(temp);
+	fclose(sort);
+	
+	rename("Temp.txt","Sort.txt");
+	rename("Sort.txt","Stock.txt");
+	
+	showRecords();
+	printf("______________________________________________________\n");	
+	printf("is sorted...");
+	
+	reinput2:
+	char input2;
+	printf("Do you want to rename the file ?\nOnce renamed, this program will never can edit again...\ny / n\n");
+	scanf("%c",&input2);
+		switch(input2){
+			
+			case 'y':
+			case 'Y':
+				goto rename;
+			case 'n':
+			case 'N':
+				return;
+			default:
+				printf("wrong input");
+				goto reinput2;
+		}	
+		
+		rename:
+			char rn[20];
+			printf("Enter your file NEW name : ");
+			gets(rn);
+			
+			rename("Stock.txt",rn);
+			printf("the file has renamed...");
+			return;
+		
+	
+}
