@@ -434,27 +434,27 @@ void dataDelete() {
     void showRecords(void);
     struct data structFromRecord(int);
 
-    int recN, x;
+    int recN, x = 0;
     char recSearch[100];
     char str1[99];
 	long int recsize;
-	FILE *file , *tem;
-    
+    FILE *file = fopen("Stock.txt", "r");
+    FILE *tem = fopen("Temp.txt", "w");  /// create a intermediate file for temporary storage
+    //rewind(file); /// move record to starting of file
 	del:
-    
-		printf("Please enter the record number you want to delete\n");
-		
-		
+    printf("Please enter the record number you want to delete\n");
 
 
-	/// sizeo of each record i.e. size of structure variable 
 
-    	
-		file = fopen("Stock.txt","r");
-		
-		strcpy(recSearch,"Record Number");
-		while (fgets(str1,99,file) != NULL){
-        if (strstr(str1,recSearch)){
+
+    /// size of each record i.e. size of structure variable
+
+
+
+
+    strcpy(recSearch, "Record Number");
+    while (fgets(str1, 99, file) != NULL) {
+        if (strstr(str1, recSearch)) {
             printf("%s",str1);
             x++;
         }
@@ -463,23 +463,19 @@ void dataDelete() {
         printf("Nothing found");
         return;
     }
-		
-		printf("______________________________________________________\n");	
-        printf("\nEnter Record Number to delete: ");
+
+    printf("______________________________________________________\n");
+    printf("\nEnter Record Number to delete: ");
     scanf("%d", &recN);
     fflush(stdin);
 
 
-    struct data dat;
-    dat = structFromRecord(recN);
-    recsize = sizeof(dat);
+    //struct data dat;
+    //dat = structFromRecord(recN);
 
-        tem = fopen("Temp.txt","w");  /// create a intermediate file for temporary storage
-        rewind(file); /// move record to starting of file
-        
-    int a = dat.Record;
+    //int a = dat.Record;
     char ch[100];
-    char ch2[100];
+    //char ch2[100];
     //itoa(a, ch, 10);
     //sprintf(ch2, "%d", recN);
     char string[100];
@@ -489,6 +485,7 @@ void dataDelete() {
             fwrite(&dat, sizeof(recsize),1,tem); /// move all records except the one that is to be deleted to temp file
         }
     }*/
+    fseek(file, 0, SEEK_SET);
     sprintf(ch, "Record Number: %d\n", recN);
     while (fgets(string, 100, file) != NULL) {
 
@@ -509,12 +506,12 @@ void dataDelete() {
         fprintf(tem, "%s", string);
 
     }
-    
+
+    fclose(file);
     fclose(tem);
-	fclose(file);
-    int ret = remove("Stock.txt");  		
+    int ret = remove("Stock.txt");
 	char input;
-	printf("result of remove is %d\n",ret);
+    //printf("result of remove is %d\n",ret);
 	
 
     if(ret == 0) {
