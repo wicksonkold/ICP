@@ -493,8 +493,8 @@ void dataDelete() {
         fclose(tem);
 
 		char input;
-        rename("Temp.txt","Stock.txt"); /// rename the temp file to original file name
     remove("Stock.txt"); /// remove the orginal file
+        rename("Temp.txt","Stock.txt"); /// rename the temp file to original file name
 
 
 		printf("Delete another record(y/n)");
