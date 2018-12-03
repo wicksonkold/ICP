@@ -34,7 +34,7 @@ int main()
     fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
     MainGUI:
-    system("cls");
+    //system("cls");
 
     printf("1. Add New Item<s> :\n");
     printf("2. Display Item Record<s> :\n");
@@ -47,41 +47,40 @@ int main()
     type:
     scanf("%d", &userinput);
     fflush(stdin);
-    system("cls");
 
     switch (userinput) {
 
         case 1:
             printf("you have selected 1. \n[Add New Item<s>]\n\n");
             addNewItem();
+            system("cls");
             goto MainGUI;
 
         case 2:
             printf("you have selected 2. \n[Display Item Record<s>] \n\n");
             displayItem();
+            system("cls");
             goto MainGUI;
         case 3:
             printf("you have selected 3. \n[Search Item Information] \n\n");
             searchItem();
+            system("cls");
             goto MainGUI;
 
         case 4:
             printf("you have selected 4. \n[Modify Item Record<s>] \n\n");
             modify();
+            system("cls");
             goto MainGUI;
 
         case 5:
             printf("you have selected 5. \n[Delete Item Record<s>] \n\n");
             dataDelete();
+            system("cls");
             goto MainGUI;
-
         case 0:
             printf("you have selected 0. \n[Quit The Program]\n");
             break;
-        case 10:
-            printf("test\n");
-            test();
-            goto MainGUI;
         default:
             printf("you have selected a invalid number <%d> PLEASE RETYPE \n", userinput);
             goto type;
@@ -106,24 +105,6 @@ int main()
  */
 
 //Sub Sections
-
-void test(){
-    struct data structFromRecord(int);
-    int recordnum;
-    printf("type a record num\n");
-    scanf("%d", &recordnum);
-    struct data Data = structFromRecord(recordnum);
-    printf("%d\n", Data.Record);
-    printf("%s\n", Data.ItemName);
-    printf("%d\n", Data.ItemNumber);
-    printf("%s\n", Data.Category);
-    printf("%d\n", Data.Quantity);
-    printf("%.1f\n", Data.Weight);
-    printf("%s\n", Data.Recipient);
-    printf("%s\n", Data.FinalDestination);
-    printf("%s\n", Data.Status);
-
-}
 
 int checkRecord(int record) {
     FILE *file = fopen("Stock.txt", "r+");

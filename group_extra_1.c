@@ -38,7 +38,7 @@ int main() {
     fileIsEmpty(); //Check whether file is empty,if it is, change file to w+ mode, else, a+ mode.
 
     MainGUI:
-    system("cls");
+    //system("cls");
 
     printf("1. Add New Item<s> :\n");
     printf("2. Display Item Record<s> :\n");
@@ -52,32 +52,37 @@ int main() {
     type:
     scanf("%d", &userinput);
     fflush(stdin);
-    system("cls");
+
 
     switch (userinput) {
 
         case 1:
             printf("you have selected 1. \n[Add New Item<s>]\n\n");
             addNewItem();
+            system("cls");
             goto MainGUI;
 
         case 2:
             printf("you have selected 2. \n[Display Item Record<s>] \n\n");
             displayItem();
+            system("cls");
             goto MainGUI;
         case 3:
             printf("you have selected 3. \n[Search Item Information] \n\n");
             searchItem();
+            system("cls");
             goto MainGUI;
 
         case 4:
             printf("you have selected 4. \n[Modify Item Record<s>] \n\n");
             modify();
+            system("cls");
             goto MainGUI;
 
         case 5:
             printf("you have selected 5. \n[Delete Item Record<s>] \n\n");
             dataDelete();
+            system("cls");
             goto MainGUI;
         case 6:
             logEnabled = !logEnabled;
